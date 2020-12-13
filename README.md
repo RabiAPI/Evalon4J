@@ -1,39 +1,51 @@
-# evalon4j-core
+# Evalon4J - 通过命令行直接生成Java项目API文档
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+## 介绍
 
-#### 软件架构
-软件架构说明
+Evalon4J是付费产品[RabiAPI](https://gitee.com/RabiAPI/RabiAPISupport)使用的底层框架，通过静态分析源代码，直接生成相对应的接口文档。
+
+### 功能特色
+
+- 纯命令行工具，与项目本身零耦合，使用方便
+- 纯静态分析，无需事先编译，构建项目，极速生成
+- 支持Java泛型，递归，继承等写法
+- 支持不同框架的混合使用
+- 完全支持标准Javadoc注释
+- 完全支持枚举类型
+
+### 支持的框架
+
+- 原生Java Interface和Javadoc注释
+- Spring MVC
+- JAX-RS
+- Swagger 2.0 注解
+- OpenAPI 3.0 注解
+- JSR303参数校验注解
+
+### 支持的导出格式
+
+- markdown
+- asciidoc
+- swagger 2.0 json 文件
+- openapi 3.0 json 文件
+
+## 技术支持
+
+$\color{red}{如果你有任何使用上的疑问，请随时加入技术支持群与我沟通。}$ 
+
+**产品交流QQ群: 244365684**
+
+> 
+
+## 使用说明
+
+Evalon4J是一个命令行工具，使用起来非常简单。
+
+1. 下载软件压缩包
+2. 解压并进入`bin`文件夹
+3. 执行 `./evalon4j {{你的Java项目根目录}} -o markdown`
 
 
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
 
 
-#### 特技
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
