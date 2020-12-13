@@ -8,7 +8,8 @@ class SpringMapping extends Annotation {
      * <p><b>Supported at the type level as well as at the method level!</b>
      * When used on both levels, a combined name is derived by concatenation
      * with "#" as separator.
-     * @see org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder* @see org.springframework.web.servlet.handler.HandlerMethodMappingNamingStrategy
+     * @see org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder
+     * @see org.springframework.web.servlet.handler.HandlerMethodMappingNamingStrategy
      */
     String name = ""
 
