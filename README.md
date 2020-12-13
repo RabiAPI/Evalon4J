@@ -4,6 +4,19 @@
 
 Evalon4J是付费产品[RabiAPI](https://gitee.com/RabiAPI/RabiAPISupport)使用的底层框架，通过静态分析源代码，直接生成相对应的接口文档。
 
+## 使用说明
+
+Evalon4J是一个命令行工具，使用起来非常简单。
+
+1. 下载软件压缩包
+2. 解压并进入`bin`文件夹
+3. 执行 `./evalon4j -p {{你的Java项目根目录}} -o markdown`
+
+## 参数说明
+
+- `-p`，指定需要生成文档的Java项目根目录，文档默认会生成在项目文件夹内
+- `-o`，指定导出的文档格式，目前一共四种: `markdown`, `asciidoc`, `swagger`, `openapi`
+
 ### 功能特色
 
 - 纯命令行工具，与项目本身零耦合，使用方便
@@ -37,18 +50,7 @@ $\color{red}{如果你有任何使用上的疑问，请随时加入技术支持�
 
 > ![img](https://i.imgur.com/HpQ6gql.png)
 
-## 使用说明
 
-Evalon4J是一个命令行工具，使用起来非常简单。
-
-1. 下载软件压缩包
-2. 解压并进入`bin`文件夹
-3. 执行 `./evalon4j -p {{你的Java项目根目录}} -o markdown`
-
-## 参数说明
-
-- `-p`，指定需要生成文档的Java项目根目录，文档默认会生成在项目文件夹内
-- `-o`，指定导出的文档格式，目前一共四种: `markdown`, `asciidoc`, `swagger`, `openapi`
 
 
 
