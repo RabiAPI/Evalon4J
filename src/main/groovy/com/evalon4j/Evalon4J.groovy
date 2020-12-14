@@ -3,6 +3,9 @@ package com.evalon4j
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.serializer.PropertyFilter
 import com.alibaba.fastjson.serializer.SerializerFeature
+import com.evalon4j.export.markdown.Markdown
+import com.evalon4j.export.openapi.OpenAPI
+import com.evalon4j.export.swagger.Swagger
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 
@@ -89,7 +92,50 @@ class Evalon4J {
     }
 
     static export(String projectPath, String exportType) {
-        println "xxx"
+        def jsonResult = new Evalon4JParser().parse(projectPath)
+
+        if (jsonResult.hasError) {
+            // TODO handle error
+            return
+        }
+
+        def evalon4jDir = new File(projectPath + "/evalon4j")
+
+        if (evalon4jDir.exists()) { // 覆盖已生成的文档
+            evalon4jDir.deleteDir()
+        }
+
+        evalon4jDir.mkdir()
+
+        jsonResult.data.modules.each { module ->
+            if (Evalon4JExportType.MARKDOWN == exportType) {
+                def markdown = new Markdown(module).toString()
+
+                new File(evalon4jDir.absolutePath + "${module.moduleName}.md").write(markdown)
+            }
+
+            if (Evalon4JExportType.ASCIIDOC == exportType) {
+                def asciidoc = new Markdown(module).toString()
+
+                new File(evalon4jDir.absolutePath + "${module.moduleName}.asciidoc").write(asciidoc)
+            }
+
+            if (Evalon4JExportType.SWAGGER == exportType) {
+                def swagger = new Swagger(module).toString()
+
+                new File(evalon4jDir.absolutePath + "${module.moduleName}_swagger.json").write(swagger)
+            }
+
+            if (Evalon4JExportType.OPENAPI == exportType) {
+                def openapi = new OpenAPI(module).toString()
+
+                new File(evalon4jDir.absolutePath + "${module.moduleName}_openapi.json").write(openapi)
+            }
+        }
+
+        println "文档已导出"
+        println "\n"
+        println "请执行 cd ${evalon4jDir.absolutePath} 查看"
     }
 
     static JSON_PROPERTIES_WHITE_LIST = [
