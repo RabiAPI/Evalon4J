@@ -19,8 +19,6 @@ class Evalon4JConfiguration {
 
     String summary = ""
 
-    String description = ""
-
     /**
      * Service Name or Service Qualified Name
      */
@@ -35,4 +33,19 @@ class Evalon4JConfiguration {
      * Dependency Source Jar Path
      */
     List<String> dependencies = []
+
+    /**
+     * Only Export Http API
+     */
+    boolean onlyHttpApi = false
+
+    /**
+     * Only Export Java RPC API
+     */
+    boolean onlyJavaApi = false
+
+    /**
+     * Export Locale, if set, will override system locale
+     */
+    String locale = null
 }

@@ -1,7 +1,10 @@
 package com.evalon4j.export.markdown
 
-
+import com.evalon4j.Evalon4JConfiguration
+import com.evalon4j.java.KeyValueTag
 import com.evalon4j.json.JsonStruct
+
+import java.time.LocalDate
 
 /**
  * comment
@@ -22,6 +25,8 @@ class Markdown {
     private static final String H4 = "#### "
 
     private static final String H5 = "##### "
+
+    private static final String LIST = " - "
 
     private static final String LF = "\n"
 
@@ -52,44 +57,103 @@ class Markdown {
         return text + LFLF
     }
 
+    static tags(List<KeyValueTag> tags = []) {
+        def val = ""
+
+        tags.each { tag ->
+            val += LIST + tag.tagName + " : " + tag.tagValue + LF
+        }
+
+        val += LF
+
+        return val
+    }
+
+    static list(List<String> items) {
+        def list = ""
+
+        items.forEach(item -> list += (LIST + item + LF))
+
+        list += LF
+
+        return list
+    }
+
+    static FIELD_NAME_CLOSURE = (JsonStruct jsonStruct) -> {
+        return jsonStruct.fieldName
+    }
+
+    static FIELD_TYPE_NAME_CLOSURE = (JsonStruct jsonStruct) -> {
+        return jsonStruct.fieldTypeName
+    }
+
+    static FIELD_REQUIRED_CLOSURE = (JsonStruct jsonStruct) -> {
+        return jsonStruct.isRequired ? " √ " : " - "
+    }
+
+    static FIELD_SUMMARY_CLOSURE = (JsonStruct jsonStruct) -> {
+        return jsonStruct.fieldSummary ? jsonStruct.fieldSummary : "/"
+    }
+
+    static infoTable(Evalon4JConfiguration cfg) {
+        def configs = [
+                new MarkdownTableColumn(
+                        columnName: "Author",
+                        columnWidth: 16,
+                        indent: true,
+                        callback: () -> {
+                            return cfg.author ? cfg.author : "/"
+                        }
+                ),
+                new MarkdownTableColumn(
+                        columnName: "Date",
+                        columnWidth: 16,
+                        callback: () -> {
+                            return LocalDate.now().toString()
+                        }
+                ),
+                new MarkdownTableColumn(
+                        columnName: "Version",
+                        columnWidth: 16,
+                        callback: () -> {
+                            return cfg.version ? cfg.version : "1.0"
+                        }
+                ),
+                new MarkdownTableColumn(
+                        columnName: "Description",
+                        columnWidth: 32,
+                        callback: () -> {
+                            return cfg.summary ? cfg.summary : "/"
+                        }
+                ),
+        ]
+
+
+        return new MarkdownTableBuilder(configs).build()
+    }
+
     static parametersTable(List<JsonStruct> jsonStructs) {
         def configs = [
                 new MarkdownTableColumn(
                         columnName: "Name",
-                        columnWidth: 0,
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldName", 24),
                         indent: true,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
+                        callback: FIELD_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(
                         columnName: "Required",
-                        columnWidth: 0,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
+                        columnWidth: 16,
+                        callback: FIELD_REQUIRED_CLOSURE
                 ),
-//                new MarkdownTableConfig(
-//                        columnName: "Default",
-//                        columnWidth: 0,
-//                        indent: true,
-//                        callback: (jsonStruct) -> {
-//                            return jsonStruct.fieldName
-//                        }
-//                ),
                 new MarkdownTableColumn(
                         columnName: "Type",
-                        columnWidth: 0,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldTypeName", 24),
+                        callback: FIELD_TYPE_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(
                         columnName: "Comment",
                         columnWidth: 32,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldSummary || "/"
-                        }
+                        callback: FIELD_SUMMARY_CLOSURE
                 ),
         ]
 
@@ -100,40 +164,19 @@ class Markdown {
         def configs = [
                 new MarkdownTableColumn(
                         columnName: "Name",
-                        columnWidth: 0,
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldName", 24),
                         indent: true,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
+                        callback: FIELD_NAME_CLOSURE,
                 ),
-                new MarkdownTableColumn(
-                        columnName: "Required",
-                        columnWidth: 0,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
-                ),
-//                new MarkdownTableConfig(
-//                        columnName: "Default",
-//                        columnWidth: 0,
-//                        indent: true,
-//                        callback: (jsonStruct) -> {
-//                            return jsonStruct.fieldName
-//                        }
-//                ),
                 new MarkdownTableColumn(
                         columnName: "Type",
                         columnWidth: 0,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
+                        callback: FIELD_TYPE_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(
                         columnName: "Comment",
                         columnWidth: 32,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldSummary || "/"
-                        }
+                        callback: FIELD_SUMMARY_CLOSURE
                 ),
         ]
 
@@ -146,43 +189,25 @@ class Markdown {
                         columnName: "Name",
                         columnWidth: 0,
                         indent: true,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
+                        callback: FIELD_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(
                         columnName: "Required",
                         columnWidth: 0,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
+                        callback: FIELD_REQUIRED_CLOSURE
                 ),
-//                new MarkdownTableConfig(
-//                        columnName: "Default",
-//                        columnWidth: 0,
-//                        indent: true,
-//                        callback: (jsonStruct) -> {
-//                            return jsonStruct.fieldName
-//                        }
-//                ),
                 new MarkdownTableColumn(
                         columnName: "Type",
                         columnWidth: 0,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldName
-                        }
+                        callback: FIELD_TYPE_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(
                         columnName: "Comment",
                         columnWidth: 32,
-                        callback: (jsonStruct) -> {
-                            return jsonStruct.fieldSummary || "/"
-                        }
+                        callback: FIELD_SUMMARY_CLOSURE
                 ),
         ]
 
         return new MarkdownTableBuilder(configs).build(jsonStructs)
     }
-
-
 }

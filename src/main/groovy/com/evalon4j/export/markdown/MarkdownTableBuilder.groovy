@@ -28,7 +28,7 @@ class MarkdownTableBuilder {
         this.configs = configs
     }
 
-    def build(List<JsonStruct> jsonStructs) {
+    def build(List<JsonStruct> jsonStructs = []) {
         def table = ""
 
         table += buildTableTitle(this.configs)
@@ -67,7 +67,7 @@ class MarkdownTableBuilder {
             divider += TABLE_DIVIDER + space(1) + underline(columnWidth)
         })
 
-        divider += ENTER
+        divider += LF
 
         return divider
     }

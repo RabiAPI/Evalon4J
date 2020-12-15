@@ -11,6 +11,66 @@ class Evalon4Ji18n {
 
     private String ZH = "zh"
 
+    def en = [
+            MarkdownBuilder: [
+                    requestMethod  : "Request Method",
+
+                    requestPath    : "",
+
+                    consumes       : "请求 Content-Type",
+
+                    requestHeaders : "请求头部",
+
+                    requestCookies : "请求 Cookies",
+
+                    parameters     : "请求参数",
+
+                    noParameter    : "没有请求参数",
+
+                    constraints    : "请求参数约束",
+
+                    produces       : "响应 Content-Type",
+
+                    response       : "返回响应",
+
+                    noResponse     : "没有返回响应",
+
+                    responseHeaders: "响应头部",
+
+                    exceptions: "抛出异常"
+            ]
+    ]
+
+    def zh = [
+            MarkdownBuilder: [
+                    requestMethod  : "请求方法",
+
+                    requestPath    : "请求路径",
+
+                    consumes       : "请求 Content-Type",
+
+                    requestHeaders : "请求头部",
+
+                    requestCookies : "请求 Cookies",
+
+                    parameters     : "请求参数",
+
+                    noParameter    : "没有请求参数",
+
+                    constraints    : "请求参数约束",
+
+                    produces       : "响应 Content-Type",
+
+                    response       : "返回响应",
+
+                    noResponse     : "没有返回响应",
+
+                    responseHeaders: "响应头部",
+
+                    exceptions: "抛出异常"
+            ]
+    ]
+
     Evalon4Ji18n() {
         this.LANG = System.getProperty("user.language", "en")
 
@@ -85,5 +145,15 @@ class Evalon4Ji18n {
 
     def complete() {
 
+    }
+
+    def MarkdownBuilder() {
+        if (LANG == EN) {
+            return en.MarkdownBuilder
+        }
+
+        if (LANG == ZH) {
+            return zh.MarkdownBuilder
+        }
     }
 }

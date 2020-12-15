@@ -19,7 +19,11 @@ class MarkdownBuilder {
 
         md += Markdown.h1(jsonModule.moduleName)
 
-        md += Markdown.text("description")
+        if (cfg.summary) {
+            md += Markdown.text(cfg.summary)
+        }
+
+        md += Markdown.infoTable(cfg)
 
         if (jsonModule.restfulApis) {
             md += Markdown.h2("HTTP API")
@@ -45,77 +49,74 @@ class MarkdownBuilder {
 
                 md += Markdown.tags(jsonMethod.tags)
 
-                md += Markdown.h5(i18n.t("MarkdownBuilder.requestMethod"))
+                md += Markdown.h5(i18n.MarkdownBuilder().requestMethod)
 
                 md += Markdown.text(jsonMethod.requestMethod)
 
-                md += Markdown.h5(i18n.t("MarkdownBuilder.requestPath"))
+                md += Markdown.h5(i18n.MarkdownBuilder().requestPath)
 
                 md += Markdown.text(jsonMethod.fullRequestPath)
 
-                if (!ExportHelper.isEmpty(jsonMethodContent.consumes)) {
-                    md += Markdown.h5(i18n.t("MarkdownBuilder.consumes"))
+                if (jsonMethod.consumes) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().consumes)
 
-                    md += Markdown.list(jsonMethodContent.consumes)
+                    md += Markdown.list(jsonMethod.consumes)
                 }
 
-                if (!ExportHelper.isEmpty(jsonMethodContent.headers)) {
-                    md += Markdown.h5(i18n.t("MarkdownBuilder.requestHeaders"))
+                if (jsonMethod.headers) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().requestHeaders)
 
-                    md += Markdown.parametersTable(jsonMethodContent.headers)
+                    md += Markdown.parametersTable(jsonMethod.headers)
                 }
 
-                if (!ExportHelper.isEmpty(jsonMethodContent.cookies)) {
-                    md += Markdown.h5(i18n.t("MarkdownBuilder.requestCookies"))
+                if (jsonMethod.cookies) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().requestCookies)
 
-                    md += Markdown.parametersTable(jsonMethodContent.cookies)
+                    md += Markdown.parametersTable(jsonMethod.cookies)
                 }
 
-                md += Markdown.h5(i18n.t("MarkdownBuilder.parameters"))
+                md += Markdown.h5(i18n.MarkdownBuilder().parameters)
 
-                if (ExportHelper.isEmpty(jsonMethodContent.parameters)) {
-                    md += Markdown.text(i18n.t("MarkdownBuilder.noParameter"))
+                if (!jsonMethod.parameters) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().noParameter)
                 } else {
-                    md += Markdown.parametersTable(jsonMethodContent.parameters)
+                    md += Markdown.parametersTable(jsonMethod.parameters)
                 }
 
-                if (!ExportHelper.isEmpty(jsonMethodContent.parameterConstraints)) {
-                    md += Markdown.h5(i18n.t("MarkdownBuilder.parameterConstraints"))
+                if (jsonMethod.parameterConstraints) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().parameterConstraints)
 
-                    md += Markdown.parameterConstraintsTable(jsonMethodContent.parameterConstraints)
+                    md += Markdown.constraintsTable(jsonMethod.parameterConstraints)
                 }
 
-                if (!ExportHelper.isEmpty(jsonMethodContent.produces)) {
-                    md += Markdown.h5(i18n.t("MarkdownBuilder.produces"))
+                if (jsonMethod.produces) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().produces)
 
-                    md += Markdown.list(jsonMethodContent.produces)
+                    md += Markdown.list(jsonMethod.produces)
                 }
 
-                md += Markdown.h5(i18n.t("MarkdownBuilder.response"))
+                md += Markdown.h5(i18n.MarkdownBuilder().response)
 
-                if (ExportHelper.isEmpty(jsonMethodContent.responses)) {
-                    md += Markdown.text(i18n.t("MarkdownBuilder.noResponse"))
+                if (!jsonMethod.responses) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().noResponse)
+
                 } else {
-                    md += Markdown.responsesTable(jsonMethodContent.responses)
+                    md += Markdown.responseTable(jsonMethod.responses)
                 }
 
-                if (!ExportHelper.isEmpty(jsonMethodContent.responseHeaders)) {
-                    md += Markdown.h5(i18n.t("MarkdownBuilder.responseHeaders"))
+                if (jsonMethod.responseHeaders) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().responseHeaders)
 
-                    md += Markdown.responsesTable(jsonMethodContent.responseHeaders)
+                    md += Markdown.responseTable(jsonMethod.responseHeaders)
                 }
             }
         }
 
-//        if (!ExportHelper.isEmpty(jsonModule.restfulApis)) {
+//        if (!ExportHelper.isEmpty(jsonModule.javaServices)) {
 //            Markdown.h2(md, "JAVA API")
 //        }
 
-        jsonModule.javaServices.each {jsonService ->
-//            if (ExportHelper.isUnchecked(jsonService.checkedStatus)) {
-//                continue
-//            }
-
+        jsonModule.javaServices.each { jsonService ->
             md += Markdown.h3(ExportHelper.getServiceSummary(jsonService))
 
             md += Markdown.text(ExportHelper.getServiceDescription(jsonService))
@@ -127,32 +128,32 @@ class MarkdownBuilder {
 
                 md += Markdown.tags(jsonMethod.tags)
 
-                md += Markdown.h5(i18n.t("MarkdownBuilder.parameters"))
+                md += Markdown.h5(i18n.MarkdownBuilder().parameters)
 
-                if (ExportHelper.isEmpty(jsonMethodContent.parameters)) {
-                    md += Markdown.text(i18n.t("MarkdownBuilder.noParameter"))
+                if (jsonMethod.parameters) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().noParameter)
                 } else {
-                    md += Markdown.parametersTable(jsonMethodContent.parameters)
+                    md += Markdown.parametersTable(jsonMethod.parameters)
                 }
 
-                if (!ExportHelper.isEmpty(jsonMethodContent.parameterConstraints)) {
-                    md += Markdown.h5(i18n.t("MarkdownBuilder.parameterConstraints"))
+                if (jsonMethod.parameterConstraints) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().parameterConstraints)
 
-                    md += Markdown.parameterConstraintsTable(jsonMethodContent.parameterConstraints)
+                    md += Markdown.constraintsTable(jsonMethod.parameterConstraints)
                 }
 
-                md += Markdown.h5(i18n.t("MarkdownBuilder.responses"))
+                md += Markdown.h5(i18n.MarkdownBuilder().responses)
 
-                if (ExportHelper.isEmpty(jsonMethodContent.responses)) {
-                    md += Markdown.text(i18n.t("MarkdownBuilder.noResponse"))
+                if (jsonMethod.responses) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().noResponse)
                 } else {
-                    md += Markdown.responsesTable(jsonMethodContent.responses)
+                    md += Markdown.responseTable(jsonMethod.responses)
                 }
 
-                if (!ExportHelper.isEmpty(jsonMethodContent.exceptions)) {
-                    md += Markdown.h5(i18n.t("MarkdownBuilder.exceptions"))
+                if (jsonMethod.exceptions) {
+                    md += Markdown.h5(i18n.MarkdownBuilder().exceptions)
 
-                    md += Markdown.responsesTable(jsonMethodContent.exceptions)
+                    md += Markdown.responseTable(jsonMethod.exceptions)
                 }
             }
         }
