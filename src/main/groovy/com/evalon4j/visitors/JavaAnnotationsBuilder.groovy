@@ -174,7 +174,7 @@ class JavaAnnotationsBuilder {
 
         def jacksonAnnotations = new JacksonAnnotations()
 
-        SwaggerAnnotations.SWAGGER_ANNOTATIONS.each { swaggerAnnotation ->
+        JacksonAnnotations.JACKSON_ANNOTATIONS.each { swaggerAnnotation ->
             def annotationExpr = annotationExprs.find { annotationExpr ->
                 annotationExpr.nameAsString == swaggerAnnotation.simpleName
             }
