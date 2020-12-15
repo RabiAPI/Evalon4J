@@ -19,6 +19,12 @@ class Evalon4J {
             return
         }
 
+        if (args.size() == 1) { // Only A Project Path Argument, this is for RabiAPI
+            println compile(args[0])
+
+            return
+        }
+
         def options = buildOptions()
 
         def parser = new DefaultParser()
@@ -42,11 +48,7 @@ class Evalon4J {
         if (cmd.hasOption("p")) {
             String path = cmd.getOptionValue("p")
 
-            if (Evalon4JExportType.EVALON == exportType) {
-                println compile(path)
-            } else {
-                export(path, exportType)
-            }
+            export(path, exportType)
         } else {
             println i18n.noJavaProjectPath()
         }

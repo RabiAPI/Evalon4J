@@ -366,27 +366,7 @@ class JavaVisitorHelper {
             }
 
             source.methods.each {sourceMethod ->
-                def targetMethod = new JavaMethod()
-
-                targetMethod.serviceName = ""
-
-                targetMethod.serviceQualifiedName = ""
-
-                targetMethod.serviceJavadocTitle = ""
-
-                targetMethod.serviceJavadocContent = ""
-
-                targetMethod.methodName = ""
-
-                sourceMethod.parameters.each { sourceParameter ->
-                    targetMethod.parameters << deepCopyJavaField(sourceParameter, dependencyTree)
-                }
-
-                if (sourceMethod.response) {
-                    targetMethod.response = deepCopyJavaAbstractType(sourceMethod.response, dependencyTree)
-                }
-
-                target.methods << targetMethod
+                target.methods << deepCopyJavaMethod(sourceMethod, dependencyTree)
             }
 
             target.isRecursive = source.isRecursive
@@ -459,5 +439,39 @@ class JavaVisitorHelper {
         targetField.jacksonAnnotations = sourceField.jacksonAnnotations
 
         return targetField
+    }
+
+    static deepCopyJavaMethod(JavaMethod sourceMethod, DependencyTree dependencyTree = null) {
+        def targetMethod = new JavaMethod()
+
+        targetMethod.serviceName = sourceMethod.serviceName
+
+        targetMethod.serviceQualifiedName = sourceMethod.serviceQualifiedName
+
+        targetMethod.serviceJavadocTitle = sourceMethod.serviceJavadocTitle
+
+        targetMethod.serviceJavadocContent = sourceMethod.serviceJavadocContent
+
+        targetMethod.methodName = sourceMethod.methodName
+
+        targetMethod.isDeprecated = sourceMethod.isDeprecated
+
+        sourceMethod.parameters.each { sourceParameter ->
+            targetMethod.parameters << deepCopyJavaField(sourceParameter, dependencyTree)
+        }
+
+        if (sourceMethod.response) {
+            targetMethod.response = deepCopyJavaAbstractType(sourceMethod.response, dependencyTree)
+        }
+
+        targetMethod.springAnnotations = sourceMethod.springAnnotations
+
+        targetMethod.jaxRSAnnotations = sourceMethod.jaxRSAnnotations
+
+        targetMethod.swaggerAnnotations = sourceMethod.swaggerAnnotations
+
+        targetMethod.openAPIAnnotations = sourceMethod.openAPIAnnotations
+
+        return targetMethod
     }
 }
