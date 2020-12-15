@@ -31,6 +31,8 @@ class JavaReferenceBuilder {
 
             buildOpenAPIAnnotationsReference(javaInterface.openAPIAnnotations, referenceTypes)
 
+            javaInterface.extensions && (javaInterface.extensions = [resolveFieldTypeRecursive(javaInterface.extensions[0], referenceTypes)])
+
             javaInterface.methods.each { javaMethod ->
                 buildMethodReference(javaMethod, referenceTypes)
             }
@@ -40,6 +42,10 @@ class JavaReferenceBuilder {
             buildSwaggerAnnotationsReference(javaClass.swaggerAnnotations, referenceTypes)
 
             buildOpenAPIAnnotationsReference(javaClass.openAPIAnnotations, referenceTypes)
+
+            if (javaClass.extensions) {
+                javaClass.extensions = [resolveFieldTypeRecursive(javaClass.extensions[0], referenceTypes)]
+            }
 
             javaClass.methods.each { javaMethod ->
                 buildMethodReference(javaMethod, referenceTypes)

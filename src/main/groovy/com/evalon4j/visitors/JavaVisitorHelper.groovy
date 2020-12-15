@@ -1,6 +1,7 @@
 package com.evalon4j.visitors
 
 import com.evalon4j.java.JavaField
+import com.evalon4j.java.JavaMethod
 import com.evalon4j.java.types.*
 import com.evalon4j.json.JsonStruct
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
@@ -304,9 +305,7 @@ class JavaVisitorHelper {
     }
 
     /**
-     * 完全复制一个 JavaAbstractType 对象
-     *
-     * @return
+     * Deep copy a JavaAbstractType for generic analysis
      */
     static JavaAbstractType deepCopyJavaAbstractType(JavaAbstractType source, DependencyTree dependencyTree = null) {
         if (source instanceof JavaPrimitiveType) {
@@ -363,31 +362,31 @@ class JavaVisitorHelper {
             }
 
             source.fields.each { sourceField ->
-                def targetField = new JavaField()
+                target.fields << deepCopyJavaField(sourceField, dependencyTree)
+            }
 
-                targetField.fieldName = sourceField.fieldName
+            source.methods.each {sourceMethod ->
+                def targetMethod = new JavaMethod()
 
-                targetField.fieldTypeName = sourceField.fieldTypeName
+                targetMethod.serviceName = ""
 
-                targetField.fieldType = deepCopyJavaAbstractType(sourceField.fieldType, dependencyTree)
+                targetMethod.serviceQualifiedName = ""
 
-                targetField.fieldQualifiedName = sourceField.fieldQualifiedName
+                targetMethod.serviceJavadocTitle = ""
 
-                targetField.isDeprecated = sourceField.isDeprecated
+                targetMethod.serviceJavadocContent = ""
 
-                targetField.isRecursive = sourceField.isRecursive
+                targetMethod.methodName = ""
 
-                targetField.isRequired = sourceField.isRequired
+                sourceMethod.parameters.each { sourceParameter ->
+                    targetMethod.parameters << deepCopyJavaField(sourceParameter, dependencyTree)
+                }
 
-                targetField.springAnnotations = sourceField.springAnnotations
+                if (sourceMethod.response) {
+                    targetMethod.response = deepCopyJavaAbstractType(sourceMethod.response, dependencyTree)
+                }
 
-                targetField.jaxRSAnnotations = sourceField.jaxRSAnnotations
-
-                targetField.swaggerAnnotations = sourceField.swaggerAnnotations
-
-                targetField.openAPIAnnotations = sourceField.openAPIAnnotations
-
-                target.fields << targetField
+                target.methods << targetMethod
             }
 
             target.isRecursive = source.isRecursive
@@ -428,5 +427,37 @@ class JavaVisitorHelper {
         if (source instanceof JavaTypePlaceholder) {
             return new JavaTypePlaceholder(simpleName: source.simpleName)
         }
+    }
+
+    static deepCopyJavaField(JavaField sourceField, DependencyTree dependencyTree = null) {
+        def targetField = new JavaField()
+
+        targetField.fieldName = sourceField.fieldName
+
+        targetField.fieldTypeName = sourceField.fieldTypeName
+
+        targetField.fieldType = deepCopyJavaAbstractType(sourceField.fieldType, dependencyTree)
+
+        targetField.fieldQualifiedName = sourceField.fieldQualifiedName
+
+        targetField.isDeprecated = sourceField.isDeprecated
+
+        targetField.isRecursive = sourceField.isRecursive
+
+        targetField.isRequired = sourceField.isRequired
+
+        targetField.isIgnore = sourceField.isIgnore
+
+        targetField.springAnnotations = sourceField.springAnnotations
+
+        targetField.jaxRSAnnotations = sourceField.jaxRSAnnotations
+
+        targetField.swaggerAnnotations = sourceField.swaggerAnnotations
+
+        targetField.openAPIAnnotations = sourceField.openAPIAnnotations
+
+        targetField.jacksonAnnotations = sourceField.jacksonAnnotations
+
+        return targetField
     }
 }

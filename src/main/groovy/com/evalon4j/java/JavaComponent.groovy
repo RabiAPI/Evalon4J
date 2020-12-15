@@ -1,5 +1,6 @@
 package com.evalon4j.java
 
+import com.evalon4j.frameworks.JacksonAnnotations
 import com.evalon4j.frameworks.JaxRSAnnotations
 import com.evalon4j.frameworks.OpenAPIAnnotations
 import com.evalon4j.frameworks.SpringAnnotations
@@ -21,7 +22,7 @@ class JavaComponent extends JavadocComponent {
 
     List<JavaMethod> methods = []
 
-    List<JavaAbstractType> extensions = [] // TODO JavaComponent Or JavaAbstractType
+    List<JavaAbstractType> extensions = []
 
     SpringAnnotations springAnnotations = null
 
@@ -30,6 +31,8 @@ class JavaComponent extends JavadocComponent {
     SwaggerAnnotations swaggerAnnotations = null
 
     OpenAPIAnnotations openAPIAnnotations = null
+
+    JacksonAnnotations jacksonAnnotations = null
 
     boolean isDeprecated = false
 }

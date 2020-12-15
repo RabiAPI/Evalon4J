@@ -6,6 +6,7 @@ import com.evalon4j.frameworks.SpringAnnotations
 import com.evalon4j.frameworks.SwaggerAnnotations
 import com.evalon4j.frameworks.ValidationAnnotations
 import com.evalon4j.java.types.JavaAbstractType
+import com.evalon4j.java.types.JavaReferenceType
 
 class JavaMethod extends JavadocComponent {
     String serviceName
@@ -46,5 +47,9 @@ class JavaMethod extends JavadocComponent {
         this.serviceJavadocTitle = javaComponent.javadocTitle
 
         this.serviceJavadocContent = javaComponent.javadocContent
+    }
+
+    JavaMethod(JavaReferenceType referenceType) {
+
     }
 }

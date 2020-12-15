@@ -9,6 +9,8 @@ class JsonStructTransformer {
     static JsonStruct transformJavaFieldToJsonStruct(JavaField javaField, DependencyTree dependencyTree = null) {
         def jsonStruct = transformJavaAbstractTypeToJsonStruct(javaField.fieldType, dependencyTree)
 
+        // Basic
+
         jsonStruct.fieldName = javaField.fieldName
 
         jsonStruct.fieldTypeName = javaField.fieldType.simpleName
@@ -16,6 +18,8 @@ class JsonStructTransformer {
         jsonStruct.isRequired = javaField.isRequired
 
         jsonStruct.isDeprecated = javaField.isDeprecated
+
+        jsonStruct.isIgnore = javaField.isIgnore
 
         // Javadoc
 
@@ -40,6 +44,26 @@ class JsonStructTransformer {
         jsonStruct.openAPIAnnotations = javaField.openAPIAnnotations
 
         jsonStruct.validationAnnotations = javaField.validationAnnotations
+
+        // Jackson Ignore
+
+        def jacksonAnnotations = javaField.jacksonAnnotations
+
+        if (jacksonAnnotations && jacksonAnnotations.jsonIgnore) {
+            jsonStruct.isIgnore = true
+        }
+
+        def swaggerAnnotations = javaField.swaggerAnnotations
+
+        // Swagger Annotations Like @ApiModelProperty
+
+        if (swaggerAnnotations && swaggerAnnotations.apiModelProperty) {
+            def apiModelProperty = swaggerAnnotations.apiModelProperty
+
+            apiModelProperty.name && (jsonStruct.fieldName = apiModelProperty.name)
+
+            apiModelProperty.value && (jsonStruct.fieldSummary = apiModelProperty.value)
+        }
 
         return jsonStruct
     }
@@ -134,7 +158,15 @@ class JsonStructTransformer {
                     dependencyTree = new DependencyTree(qualifiedName: javaAbstractType.qualifiedName, parent: dependencyTree)
                 }
 
+                // Set field to ignore from @JsonIgnoreProperties annotation
+
+                def jsonIgnoreProperties = javaAbstractType?.jacksonAnnotations?.jsonIgnoreProperties
+
                 javaAbstractType.fields.each { javaField ->
+                    if (jsonIgnoreProperties && jsonIgnoreProperties.value.contains(javaField.fieldName)) {
+                        javaField.isIgnore = true
+                    }
+
                     jsonStruct.children << transformJavaFieldToJsonStruct(javaField, dependencyTree)
                 }
 
@@ -147,6 +179,16 @@ class JsonStructTransformer {
 
             jsonStruct.children.unique {
                 return it.fieldName
+            }
+
+            // Swagger Annotations Like @ApiModel
+
+            if (javaAbstractType.swaggerAnnotations && javaAbstractType.swaggerAnnotations.apiModel) {
+                def apiModel = javaAbstractType.swaggerAnnotations.apiModel
+
+                apiModel.value && (jsonStruct.fieldSummary = apiModel.value)
+
+                apiModel.description && (jsonStruct.fieldDescription = apiModel.description)
             }
 
             return jsonStruct

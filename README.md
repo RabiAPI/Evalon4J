@@ -42,7 +42,6 @@ You can also put a `evalon4j.json` file under your project root, or using `-c` t
 
 - [ ] Export documentation as a static website
 - [ ] Support `ApidocJS` Framework
-- [ ] 
 
 ### Features
 

@@ -98,15 +98,19 @@ class JavaGenericType extends JavaAbstractType {
             }
         }
 
-//        containerType.methods.each { method ->
-//            method.parameters.each {parameter ->
-//                parameter.fieldType = JavaVisitorHelper.replaceJavaAbstractTypeWithAction(parameter.fieldType, placeholderToActualType, replaceGenericPlaceholder) as JavaAbstractType
-//
-//                parameter.fieldTypeName = parameter.fieldType.getSimpleName()
-//            }
-//
-//            method.response && (method.response = JavaVisitorHelper.replaceJavaAbstractTypeWithAction(method.response, placeholderToActualType, replaceGenericPlaceholder) as JavaAbstractType)
-//        }
+        containerType.methods.each { method ->
+            method.parameters.each { parameter ->
+                parameter.fieldType = JavaVisitorHelper.replaceJavaAbstractTypeWithAction(parameter.fieldType, placeholderToActualType, replaceGenericPlaceholder) as JavaAbstractType
+
+                parameter.fieldTypeName = parameter.fieldType.getSimpleName()
+            }
+
+            if (method.response) {
+                def actualResponseType = JavaVisitorHelper.replaceJavaAbstractTypeWithAction(method.response, placeholderToActualType, replaceGenericPlaceholder) as JavaAbstractType
+
+                method.response = actualResponseType
+            }
+        }
 
         recurseExtensions(containerType.extensions)
 

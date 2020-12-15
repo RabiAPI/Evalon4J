@@ -75,13 +75,9 @@ class JsonStruct extends JavadocComponent {
 
     String enumValue = ""
 
-    // struct not exists in project
+    // struct not exists in project, need source jar
 
     boolean notExists = false
-
-//    Validated validated = null
-
-//    List<JavaValidationAnnotation> constraints = []
 
     List<JsonStruct> children = []
 

@@ -10,26 +10,12 @@ import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 
 class Evalon4J {
-    static HELP = """
-    欢迎使用Evalon4J
-    
-    项目主页: https://gitee.com/RabiAPI/evalon4j
-    
-    产品支持QQ群: 244365684
-    
-    参数说明:
-    
-    -p {指定Java项目根目录}
-    -o {指定导出格式} 允许的格式为 ['markdown', 'asciidoc', 'swagger', 'openapi']
-    
-    使用示例:
-    
-    ./evalon4j -p ~/repository/pet-store -o markdown
-    """
+    static i18n = new Evalon4Ji18n()
 
     static void main(String[] args) {
         if (!args) {
-            println HELP
+            println i18n.help()
+
             return
         }
 
@@ -40,14 +26,15 @@ class Evalon4J {
         def cmd = parser.parse(options, args)
 
         if (cmd.hasOption("h") || cmd.hasOption("help")) {
-            println HELP
+            println i18n.help()
+
             return
         }
 
         def exportType = cmd.getOptionValue("o", Evalon4JExportType.MARKDOWN)
 
         if (!Evalon4JExportType.EXPORT_TYPES.contains(exportType)) {
-            println "未知的导出类型，允许的导出类型为 ['markdown', 'asciidoc', 'swagger', 'openapi']"
+            println i18n.unknownExportType()
 
             return
         }
@@ -61,22 +48,22 @@ class Evalon4J {
                 export(path, exportType)
             }
         } else {
-            println "请使用 -p 参数指定Java项目路径"
+            println i18n.noJavaProjectPath()
         }
     }
 
     static buildOptions() {
         Options options = new Options()
 
-        options.addOption("p", true, "Java项目根目录路径")
+        options.addOption("p", true, "")
 
-        options.addOption("o", true, "指定导出类型")
+        options.addOption("o", true, "")
 
-        options.addOption("c", false, "Evalon4J配置文件路径")
+        options.addOption("c", false, "")
 
-        options.addOption("h", false, HELP)
+        options.addOption("h", false, "")
 
-        options.addOption("help", false, HELP)
+        options.addOption("help", false, "")
 
         return options
     }
@@ -101,7 +88,7 @@ class Evalon4J {
 
         def evalon4jDir = new File(projectPath + "/evalon4j")
 
-        if (evalon4jDir.exists()) { // 覆盖已生成的文档
+        if (evalon4jDir.exists()) { // Override the output
             evalon4jDir.deleteDir()
         }
 
@@ -133,9 +120,7 @@ class Evalon4J {
             }
         }
 
-        println "文档已导出"
-        println "\n"
-        println "请执行 cd ${evalon4jDir.absolutePath} 查看"
+        println i18n.complete()
     }
 
     static JSON_PROPERTIES_WHITE_LIST = [

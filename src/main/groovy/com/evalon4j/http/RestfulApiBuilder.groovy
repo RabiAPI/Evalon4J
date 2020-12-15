@@ -103,35 +103,35 @@ class RestfulApiBuilder {
         def springAnnotations = javaComponent.springAnnotations
 
         if (springAnnotations.restController) {
-//            if (javaComponent.extensions) { // 处理抽象Controller
-//                javaComponent.extensions.each { extension ->
-//                    if (extension instanceof JavaGenericType) {
-//                        def actualType = extension.build()
-//
-//                        if (actualType.notExists) {
-//                            return
-//                        }
-//
-//                        actualType && actualType.methods.each {javaMethod ->
-//                            def api = buildRestfulApi(javaComponent, javaMethod)
-//
-//                            api && (jsonService.methods << api)
-//                        }
-//                    }
-//
-//                    if (extension instanceof JavaReferenceType) {
-//                        if (extension.notExists) {
-//                            return
-//                        }
-//
-//                        extension.methods.each { javaMethod ->
-//                            def api = buildRestfulApi(javaComponent, javaMethod)
-//
-//                            api && (jsonService.methods << api)
-//                        }
-//                    }
-//                }
-//            }
+            if (javaComponent.extensions) { // 处理抽象Controller
+                javaComponent.extensions.each { extension ->
+                    if (extension instanceof JavaGenericType) {
+                        def actualType = extension.build()
+
+                        if (actualType.notExists) {
+                            return
+                        }
+
+                        actualType && actualType.methods.each {javaMethod ->
+                            def api = buildRestfulApi(javaComponent, javaMethod)
+
+                            api && (jsonService.methods << api)
+                        }
+                    }
+
+                    if (extension instanceof JavaReferenceType) {
+                        if (extension.notExists) {
+                            return
+                        }
+
+                        extension.methods.each { javaMethod ->
+                            def api = buildRestfulApi(javaComponent, javaMethod)
+
+                            api && (jsonService.methods << api)
+                        }
+                    }
+                }
+            }
 
             if (springAnnotations.requestMapping) { // 处理RequestMapping
                 def requestMapping = springAnnotations.requestMapping

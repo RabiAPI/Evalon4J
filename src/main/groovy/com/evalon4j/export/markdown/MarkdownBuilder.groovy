@@ -1,8 +1,10 @@
 package com.evalon4j.export.markdown
 
 import com.evalon4j.Evalon4JConfiguration
+import com.evalon4j.Evalon4Ji18n
 import com.evalon4j.export.ExportHelper
 import com.evalon4j.json.JsonModule
+import com.evalon4j.json.JsonService
 
 /**
  * comment
@@ -10,6 +12,8 @@ import com.evalon4j.json.JsonModule
  * @author whitecosm0s_
  */
 class MarkdownBuilder {
+    static i18n = new Evalon4Ji18n()
+
     static String buildFromJsonModule(JsonModule jsonModule, Evalon4JConfiguration cfg) {
         def md = ""
 
@@ -21,23 +25,23 @@ class MarkdownBuilder {
             md += Markdown.h2("HTTP API")
         }
 
-        jsonModule.restfulApis.each {jsonService ->
-//            if (ExportHelper.isUnchecked(jsonService.checkedStatus)) {
-//                continue
-//            }
+        jsonModule.restfulApis.each { jsonService ->
+            if (isExcludedService(cfg, jsonService)) {
+                return
+            }
 
-            md += Markdown.h3(ExportHelper.getServiceTitle(jsonService))
+            if (!isIncludedService(cfg, jsonService)) {
+                return
+            }
 
-            md += Markdown.text(ExportHelper.getServiceSubtitle(jsonService))
+            md += Markdown.h3(ExportHelper.getServiceSummary(jsonService))
+
+            md += Markdown.text(ExportHelper.getServiceDescription(jsonService))
 
             jsonService.methods.each { jsonMethod ->
-//                if (ExportHelper.isUnchecked(jsonMethod.checkedStatus)) {
-//                    continue
-//                }
+                md += Markdown.h4(ExportHelper.getMethodSummary(jsonMethod))
 
-                md += Markdown.h4(ExportHelper.getMethodTitle(jsonMethod))
-
-                md += Markdown.text(ExportHelper.getMethodSubtitle(jsonMethod))
+                md += Markdown.text(ExportHelper.getMethodDescription(jsonMethod))
 
                 md += Markdown.tags(jsonMethod.tags)
 
@@ -117,9 +121,9 @@ class MarkdownBuilder {
             md += Markdown.text(ExportHelper.getServiceDescription(jsonService))
 
             jsonService.methods.each { jsonMethod ->
-                md += Markdown.h4(ExportHelper.getMethodTitle(jsonMethod))
+                md += Markdown.h4(ExportHelper.getMethodSummary(jsonMethod))
 
-                md += Markdown.text(ExportHelper.getMethodSubtitle(jsonMethod))
+                md += Markdown.text(ExportHelper.getMethodDescription(jsonMethod))
 
                 md += Markdown.tags(jsonMethod.tags)
 
@@ -154,5 +158,21 @@ class MarkdownBuilder {
         }
 
         return md
+    }
+
+    boolean isExcludedService(Evalon4JConfiguration cfg, JsonService jsonService) {
+        if (!cfg.excludedServices) {
+            return false
+        }
+
+        return cfg.excludedServices.contains(jsonService.serviceName) || cfg.excludedServices.contains(jsonService.serviceQualifiedName)
+    }
+
+    boolean isIncludedService(Evalon4JConfiguration cfg, JsonService jsonService) {
+        if (!cfg.includedServices) {
+            return false
+        }
+
+        return cfg.includedServices.contains(jsonService.serviceName) || cfg.includedServices.contains(jsonService.serviceQualifiedName)
     }
 }

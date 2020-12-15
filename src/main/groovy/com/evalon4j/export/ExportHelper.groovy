@@ -1,5 +1,6 @@
 package com.evalon4j.export
 
+import com.evalon4j.json.JsonMethod
 import com.evalon4j.json.JsonService
 
 /**
@@ -13,6 +14,14 @@ class ExportHelper {
     }
 
     static String getServiceDescription(JsonService jsonService) {
+        return ""
+    }
+
+    static String getMethodSummary(JsonMethod jsonMethod) {
+        return ""
+    }
+
+    static String getMethodDescription(JsonMethod jsonMethod) {
         return ""
     }
 }

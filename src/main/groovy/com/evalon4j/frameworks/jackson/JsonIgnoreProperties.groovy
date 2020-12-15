@@ -1,4 +1,7 @@
 package com.evalon4j.frameworks.jackson
 
-class JsonIgnoreProperties {
+import com.evalon4j.frameworks.Annotation
+
+class JsonIgnoreProperties extends Annotation {
+    List<String> value = []
 }
