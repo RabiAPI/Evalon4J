@@ -1,5 +1,6 @@
 package com.evalon4j.export.markdown
 
+import com.evalon4j.Evalon4JConfiguration
 import com.evalon4j.json.JsonStruct
 
 /**
@@ -28,7 +29,21 @@ class MarkdownTableBuilder {
         this.configs = configs
     }
 
-    def build(List<JsonStruct> jsonStructs = []) {
+    def build(Evalon4JConfiguration cfg) {
+        def table = ""
+
+        table += buildTableTitle(this.configs)
+
+        table += buildTableDivider(this.configs)
+
+        table += buildTableRow(this.configs, null, 0)
+
+        table += "\n"
+
+        return table
+    }
+
+    def build(List<JsonStruct> jsonStructs) {
         def table = ""
 
         table += buildTableTitle(this.configs)
@@ -78,7 +93,7 @@ class MarkdownTableBuilder {
         jsonStructs.each(jsonStruct -> {
             rows += buildTableRow(configs, jsonStruct, layer)
 
-            if (!_.isEmpty(jsonStruct.children)) {
+            if (jsonStruct.children) {
                 rows += buildTableRows(configs, jsonStruct.children, layer + 1)
             }
         })
@@ -90,15 +105,15 @@ class MarkdownTableBuilder {
         def row = ""
 
         configs.each(config -> {
-            def columnWidth = config.columnWidth
+            int columnWidth = config.columnWidth
 
-            def columnValue = config.callback(jsonStruct)
+            String columnValue = config.callback(jsonStruct)
 
             if (config.indent && layer > 0) {
                 columnValue = placeholder(layer) + FIELD_CHILDREN_SYMBOL + columnValue
             }
 
-            row += TABLE_DIVIDER + space(1) + columnValue + space(columnWidth - columnValue.length)
+            row += TABLE_DIVIDER + space(1) + columnValue + space(columnWidth - columnValue.length())
         })
 
         row += LF

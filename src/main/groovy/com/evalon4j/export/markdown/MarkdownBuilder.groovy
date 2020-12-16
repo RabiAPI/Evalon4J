@@ -51,11 +51,11 @@ class MarkdownBuilder {
 
                 md += Markdown.h5(i18n.MarkdownBuilder().requestMethod)
 
-                md += Markdown.text(jsonMethod.requestMethod)
+                md += Markdown.list(jsonMethod.requestMethod)
 
                 md += Markdown.h5(i18n.MarkdownBuilder().requestPath)
 
-                md += Markdown.text(jsonMethod.fullRequestPath)
+                md += Markdown.list(jsonMethod.fullRequestPath)
 
                 if (jsonMethod.consumes) {
                     md += Markdown.h5(i18n.MarkdownBuilder().consumes)
@@ -84,7 +84,7 @@ class MarkdownBuilder {
                 }
 
                 if (jsonMethod.parameterConstraints) {
-                    md += Markdown.h5(i18n.MarkdownBuilder().parameterConstraints)
+                    md += Markdown.h5(i18n.MarkdownBuilder().constraints)
 
                     md += Markdown.constraintsTable(jsonMethod.parameterConstraints)
                 }
@@ -117,6 +117,14 @@ class MarkdownBuilder {
 //        }
 
         jsonModule.javaServices.each { jsonService ->
+            if (isExcludedService(cfg, jsonService)) {
+                return
+            }
+
+            if (!isIncludedService(cfg, jsonService)) {
+                return
+            }
+
             md += Markdown.h3(ExportHelper.getServiceSummary(jsonService))
 
             md += Markdown.text(ExportHelper.getServiceDescription(jsonService))
@@ -130,21 +138,21 @@ class MarkdownBuilder {
 
                 md += Markdown.h5(i18n.MarkdownBuilder().parameters)
 
-                if (jsonMethod.parameters) {
+                if (!jsonMethod.parameters) {
                     md += Markdown.h5(i18n.MarkdownBuilder().noParameter)
                 } else {
                     md += Markdown.parametersTable(jsonMethod.parameters)
                 }
 
                 if (jsonMethod.parameterConstraints) {
-                    md += Markdown.h5(i18n.MarkdownBuilder().parameterConstraints)
+                    md += Markdown.h5(i18n.MarkdownBuilder().constraints)
 
                     md += Markdown.constraintsTable(jsonMethod.parameterConstraints)
                 }
 
-                md += Markdown.h5(i18n.MarkdownBuilder().responses)
+                md += Markdown.h5(i18n.MarkdownBuilder().response)
 
-                if (jsonMethod.responses) {
+                if (!jsonMethod.responses) {
                     md += Markdown.h5(i18n.MarkdownBuilder().noResponse)
                 } else {
                     md += Markdown.responseTable(jsonMethod.responses)
@@ -161,7 +169,7 @@ class MarkdownBuilder {
         return md
     }
 
-    boolean isExcludedService(Evalon4JConfiguration cfg, JsonService jsonService) {
+    static boolean isExcludedService(Evalon4JConfiguration cfg, JsonService jsonService) {
         if (!cfg.excludedServices) {
             return false
         }
@@ -169,9 +177,9 @@ class MarkdownBuilder {
         return cfg.excludedServices.contains(jsonService.serviceName) || cfg.excludedServices.contains(jsonService.serviceQualifiedName)
     }
 
-    boolean isIncludedService(Evalon4JConfiguration cfg, JsonService jsonService) {
+    static boolean isIncludedService(Evalon4JConfiguration cfg, JsonService jsonService) {
         if (!cfg.includedServices) {
-            return false
+            return true
         }
 
         return cfg.includedServices.contains(jsonService.serviceName) || cfg.includedServices.contains(jsonService.serviceQualifiedName)

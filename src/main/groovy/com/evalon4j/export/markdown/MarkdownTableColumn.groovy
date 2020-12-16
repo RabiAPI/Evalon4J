@@ -12,7 +12,7 @@ class MarkdownTableColumn {
 
     int columnWidth = 0
 
-    boolean indent = true
+    boolean indent = false
 
     Closure callback
 }

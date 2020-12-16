@@ -3,9 +3,7 @@ package com.evalon4j
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.serializer.PropertyFilter
 import com.alibaba.fastjson.serializer.SerializerFeature
-import com.evalon4j.export.markdown.Markdown
-import com.evalon4j.export.openapi.OpenAPI
-import com.evalon4j.export.swagger.Swagger
+import com.evalon4j.export.markdown.MarkdownBuilder
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 
@@ -98,28 +96,29 @@ class Evalon4J {
 
         jsonResult.data.modules.each { module ->
             if (Evalon4JExportType.MARKDOWN == exportType) {
-                def markdown = new Markdown(module).toString()
+                //TODO read from json file
+                def markdown = MarkdownBuilder.buildFromJsonModule(module, new Evalon4JConfiguration())
 
-                new File(evalon4jDir.absolutePath + "${module.moduleName}.md").write(markdown)
+                new File(evalon4jDir.absolutePath + "/${module.moduleName}.md").write(markdown)
             }
 
-            if (Evalon4JExportType.ASCIIDOC == exportType) {
-                def asciidoc = new Markdown(module).toString()
-
-                new File(evalon4jDir.absolutePath + "${module.moduleName}.asciidoc").write(asciidoc)
-            }
-
-            if (Evalon4JExportType.SWAGGER == exportType) {
-                def swagger = new Swagger(module).toString()
-
-                new File(evalon4jDir.absolutePath + "${module.moduleName}_swagger.json").write(swagger)
-            }
-
-            if (Evalon4JExportType.OPENAPI == exportType) {
-                def openapi = new OpenAPI(module).toString()
-
-                new File(evalon4jDir.absolutePath + "${module.moduleName}_openapi.json").write(openapi)
-            }
+//            if (Evalon4JExportType.ASCIIDOC == exportType) {
+//                def asciidoc = new Markdown(module).toString()
+//
+//                new File(evalon4jDir.absolutePath + "${module.moduleName}.asciidoc").write(asciidoc)
+//            }
+//
+//            if (Evalon4JExportType.SWAGGER == exportType) {
+//                def swagger = new Swagger(module).toString()
+//
+//                new File(evalon4jDir.absolutePath + "${module.moduleName}_swagger.json").write(swagger)
+//            }
+//
+//            if (Evalon4JExportType.OPENAPI == exportType) {
+//                def openapi = new OpenAPI(module).toString()
+//
+//                new File(evalon4jDir.absolutePath + "${module.moduleName}_openapi.json").write(openapi)
+//            }
         }
 
         println i18n.complete()

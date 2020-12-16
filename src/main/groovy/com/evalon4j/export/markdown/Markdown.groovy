@@ -69,6 +69,16 @@ class Markdown {
         return val
     }
 
+    static list(String item) {
+        def list = ""
+
+        list += LIST + item + LF
+
+        list += LF
+
+        return list
+    }
+
     static list(List<String> items) {
         def list = ""
 
@@ -101,35 +111,35 @@ class Markdown {
                         columnName: "Author",
                         columnWidth: 16,
                         indent: true,
-                        callback: () -> {
+                        callback: (JsonStruct jsonStruct) -> {
                             return cfg.author ? cfg.author : "/"
                         }
                 ),
                 new MarkdownTableColumn(
                         columnName: "Date",
                         columnWidth: 16,
-                        callback: () -> {
+                        callback: (JsonStruct jsonStruct) -> {
                             return LocalDate.now().toString()
                         }
                 ),
                 new MarkdownTableColumn(
                         columnName: "Version",
                         columnWidth: 16,
-                        callback: () -> {
+                        callback: (JsonStruct jsonStruct) -> {
                             return cfg.version ? cfg.version : "1.0"
                         }
                 ),
                 new MarkdownTableColumn(
                         columnName: "Description",
                         columnWidth: 32,
-                        callback: () -> {
+                        callback: (JsonStruct jsonStruct) -> {
                             return cfg.summary ? cfg.summary : "/"
                         }
                 ),
         ]
 
 
-        return new MarkdownTableBuilder(configs).build()
+        return new MarkdownTableBuilder(configs).build(cfg)
     }
 
     static parametersTable(List<JsonStruct> jsonStructs) {
@@ -142,7 +152,7 @@ class Markdown {
                 ),
                 new MarkdownTableColumn(
                         columnName: "Required",
-                        columnWidth: 16,
+                        columnWidth: 8,
                         callback: FIELD_REQUIRED_CLOSURE
                 ),
                 new MarkdownTableColumn(
@@ -170,7 +180,7 @@ class Markdown {
                 ),
                 new MarkdownTableColumn(
                         columnName: "Type",
-                        columnWidth: 0,
+                        columnWidth: 16,
                         callback: FIELD_TYPE_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(
@@ -187,18 +197,18 @@ class Markdown {
         def configs = [
                 new MarkdownTableColumn(
                         columnName: "Name",
-                        columnWidth: 0,
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldName", 24),
                         indent: true,
                         callback: FIELD_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(
                         columnName: "Required",
-                        columnWidth: 0,
+                        columnWidth: 8,
                         callback: FIELD_REQUIRED_CLOSURE
                 ),
                 new MarkdownTableColumn(
                         columnName: "Type",
-                        columnWidth: 0,
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldTypeName", 24),
                         callback: FIELD_TYPE_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(

@@ -15,29 +15,29 @@ class Evalon4Ji18n {
             MarkdownBuilder: [
                     requestMethod  : "Request Method",
 
-                    requestPath    : "",
+                    requestPath    : "Request Path",
 
-                    consumes       : "请求 Content-Type",
+                    consumes       : "Request Content-Type",
 
-                    requestHeaders : "请求头部",
+                    requestHeaders : "Request Headers",
 
-                    requestCookies : "请求 Cookies",
+                    requestCookies : "Request Cookies",
 
-                    parameters     : "请求参数",
+                    parameters     : "Parameters",
 
-                    noParameter    : "没有请求参数",
+                    noParameter    : "No Parameter",
 
-                    constraints    : "请求参数约束",
+                    constraints    : "Constraints",
 
-                    produces       : "响应 Content-Type",
+                    produces       : "Response Content-Type",
 
-                    response       : "返回响应",
+                    response       : "Response",
 
-                    noResponse     : "没有返回响应",
+                    noResponse     : "No Response",
 
-                    responseHeaders: "响应头部",
+                    responseHeaders: "Response Headers",
 
-                    exceptions: "抛出异常"
+                    exceptions: "Exceptions"
             ]
     ]
 
@@ -144,7 +144,13 @@ class Evalon4Ji18n {
     }
 
     def complete() {
+        if (LANG == EN) {
+            return "Export Complete"
+        }
 
+        if (LANG == ZH) {
+            return "导出结束"
+        }
     }
 
     def MarkdownBuilder() {
