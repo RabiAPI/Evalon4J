@@ -2,6 +2,7 @@ package com.evalon4j.visitors
 
 import com.evalon4j.java.JavaComponent
 import com.evalon4j.java.JavaField
+import com.evalon4j.java.JavaMethod
 import com.evalon4j.java.JavaProject
 import com.evalon4j.java.types.JavaAbstractType
 import com.evalon4j.java.types.JavaEnumValue
@@ -13,6 +14,7 @@ import com.github.javaparser.ast.PackageDeclaration
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.EnumDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
+import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.expr.LiteralStringValueExpr
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
 
@@ -136,9 +138,89 @@ class JavaReferenceVisitor extends VoidVisitorAdapter<JavaProject> {
             }
         }
 
+        def javaComponent = new JavaComponent(packageName: packageName, imports: imports, moduleName: moduleName)
+
+        n.methods.each {m ->
+            def javaMethod = new JavaMethod(referenceType)
+
+            javaMethod.methodName = m.nameAsString
+
+            JavadocHelper.setJavadoc(javaMethod, m)
+
+            javaMethod.springAnnotations = new JavaAnnotationsBuilder(javaComponent).buildSpringAnnotations(m.annotations)
+
+            javaMethod.jaxRSAnnotations = new JavaAnnotationsBuilder(javaComponent).buildJaxRSAnnotations(m.annotations)
+
+            javaMethod.swaggerAnnotations = new JavaAnnotationsBuilder(javaComponent).buildSwaggerAnnotations(m.annotations)
+
+            javaMethod.openAPIAnnotations = new JavaAnnotationsBuilder(javaComponent).buildOpenAPIAnnotations(m.annotations)
+
+            buildMethodParameters(m, javaMethod, javaComponent)
+
+            buildMethodResponse(m, javaMethod)
+
+//            buildMethodExceptions(m, javaMethod)
+
+            referenceType.methods << javaMethod
+        }
+
         buildSwaggerAndOpenAPIDefinitions(n, arg)
 
+        buildReferenceAnnotations(n, referenceType)
+
         arg.references << referenceType
+    }
+
+    void buildMethodParameters(MethodDeclaration n, JavaMethod javaMethod, JavaComponent javaComponent) {
+        n.parameters.each { p ->
+            try {
+                def javaField = new JavaField()
+
+                javaField.fieldName = p.nameAsString
+
+                javaField.fieldType = new JavaAbstractTypeBuilder(moduleName, packageName, imports, typePlaceholders).buildFieldTypeRecursive(p.type)
+
+                javaField.isRequired = JavaVisitorHelper.isRequired(p)
+
+                javaField.javadocTitle = JavadocHelper.getParameterComment(n, p.nameAsString)
+
+                javaField.springAnnotations = new JavaAnnotationsBuilder(javaComponent).buildSpringAnnotations(p.annotations)
+
+                javaField.jaxRSAnnotations = new JavaAnnotationsBuilder(javaComponent).buildJaxRSAnnotations(p.annotations)
+
+                javaField.swaggerAnnotations = new JavaAnnotationsBuilder(javaComponent).buildSwaggerAnnotations(p.annotations)
+
+                javaField.openAPIAnnotations = new JavaAnnotationsBuilder(javaComponent).buildOpenAPIAnnotations(p.annotations)
+
+                javaField.validationAnnotations = new JavaAnnotationsBuilder(javaComponent).buildValidationAnnotations(p.annotations)
+
+                javaField.jacksonAnnotations = new JavaAnnotationsBuilder(javaComponent).buildJacksonAnnotations(p.annotations)
+
+                javaMethod.parameters << javaField
+            } catch (Exception e) {
+                errors << new JsonError(e)
+            }
+        }
+    }
+
+    void buildMethodResponse(MethodDeclaration n, JavaMethod javaMethod) {
+        try {
+            def responseType = n.type
+
+            // 对于返回 List<? extends XXX> 这种类型可以读取所有子类，作为可能的返回结果，当前版本先跳过
+
+            if (responseType.isVoidType() || responseType.isWildcardType()) {
+                return
+            }
+
+            def returnType = new JavaAbstractTypeBuilder(moduleName, packageName, imports, typePlaceholders).buildFieldTypeRecursive(responseType)
+
+            returnType.javadocTitle = JavadocHelper.getReturnTypeComment(n)
+
+            javaMethod.response = returnType
+        } catch (Exception e) {
+            errors << new JsonError(e)
+        }
     }
 
     private buildSwaggerAndOpenAPIDefinitions(ClassOrInterfaceDeclaration n, JavaProject javaProject) {
@@ -155,6 +237,16 @@ class JavaReferenceVisitor extends VoidVisitorAdapter<JavaProject> {
         swaggerAnnotations?.swaggerDefinition && (javaModule.swaggerDefinition = swaggerAnnotations.swaggerDefinition)
 
         openAPIAnnotations?.openAPIDefinition && (javaModule.openAPIDefinition = openAPIAnnotations.openAPIDefinition)
+    }
+
+    private buildReferenceAnnotations(ClassOrInterfaceDeclaration n, JavaReferenceType referenceType) {
+        def javaComponent = new JavaComponent(packageName: packageName, imports: imports, moduleName: moduleName)
+
+        referenceType.swaggerAnnotations = new JavaAnnotationsBuilder(javaComponent).buildSwaggerAnnotations(n.annotations)
+
+        referenceType.openAPIAnnotations = new JavaAnnotationsBuilder(javaComponent).buildOpenAPIAnnotations(n.annotations)
+
+        referenceType.jacksonAnnotations = new JavaAnnotationsBuilder(javaComponent).buildJacksonAnnotations(n.annotations)
     }
 
     private buildJavaField(FieldDeclaration n) {
@@ -175,6 +267,8 @@ class JavaReferenceVisitor extends VoidVisitorAdapter<JavaProject> {
         javaField.openAPIAnnotations = new JavaAnnotationsBuilder(javaComponent).buildOpenAPIAnnotations(n.annotations)
 
         javaField.validationAnnotations = new JavaAnnotationsBuilder(javaComponent).buildValidationAnnotations(n.annotations)
+
+        javaField.jacksonAnnotations = new JavaAnnotationsBuilder(javaComponent).buildJacksonAnnotations(n.annotations)
 
         return javaField
     }

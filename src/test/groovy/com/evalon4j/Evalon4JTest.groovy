@@ -6,10 +6,6 @@ import org.junit.Test
 class Evalon4JTest {
     @Test
     void testCompile() {
-//        String projectPath = "/Users/whitecosm0s/Repository - Alibaba/arena-api-melody"
-
-//        String projectPath = "/Users/whitecosm0s/Repository/evalon4j-example-project"
-
         String projectPath = "/Users/whitecosm0s/Repository/MultipleModuleProject"
 
         println Evalon4J.compile(projectPath)
@@ -54,13 +50,6 @@ class Evalon4JTest {
         String doc = Evalon4J.compile(projectPath)
 
         println doc
-    }
-
-    @Test
-    void testArenaApiMelody() {
-        String projectPath = "/Users/whitecosm0s/Repository - Alibaba/arena-api-melody"
-
-        Evalon4J.compile(projectPath)
     }
 
     @Test

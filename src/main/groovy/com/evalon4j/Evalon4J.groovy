@@ -3,22 +3,23 @@ package com.evalon4j
 import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.serializer.PropertyFilter
 import com.alibaba.fastjson.serializer.SerializerFeature
+import com.evalon4j.export.markdown.MarkdownBuilder
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 
 class Evalon4J {
-    static final String EVALON = "evalon"
-
-    static final String MARKDOWN = "evalon"
-
-    static final String ASCIIDOC = "evalon"
-
-    static final String SWAGGER = "evalon"
-
-    static final String OPENAPI = "evalon"
+    static i18n = new Evalon4Ji18n()
 
     static void main(String[] args) {
         if (!args) {
+            println i18n.help()
+
+            return
+        }
+
+        if (args.size() == 1) { // Only A Project Path Argument, this is for RabiAPI
+            println compile(args[0])
+
             return
         }
 
@@ -28,21 +29,41 @@ class Evalon4J {
 
         def cmd = parser.parse(options, args)
 
-        String projectPath = args.first()
+        if (cmd.hasOption("h") || cmd.hasOption("help")) {
+            println i18n.help()
 
-        println compile(projectPath)
+            return
+        }
+
+        def exportType = cmd.getOptionValue("o", Evalon4JExportType.MARKDOWN)
+
+        if (!Evalon4JExportType.EXPORT_TYPES.contains(exportType)) {
+            println i18n.unknownExportType()
+
+            return
+        }
+
+        if (cmd.hasOption("p")) {
+            String path = cmd.getOptionValue("p")
+
+            export(path, exportType)
+        } else {
+            println i18n.noJavaProjectPath()
+        }
     }
 
     static buildOptions() {
         Options options = new Options()
 
-        options.addOption("p", true, "Java Project Directory Absolute Path")
+        options.addOption("p", true, "")
 
-        options.addOption("o", true, "Export Type")
+        options.addOption("o", true, "")
 
-        options.addOption("c", false, "Evalon4J Configuration Json File")
+        options.addOption("c", false, "")
 
         options.addOption("h", false, "")
+
+        options.addOption("help", false, "")
 
         return options
     }
@@ -55,6 +76,52 @@ class Evalon4J {
         def resultStr = JSON.toJSONString(result, propertyFilter, SerializerFeature.PrettyFormat)
 
         return resultStr
+    }
+
+    static export(String projectPath, String exportType) {
+        def jsonResult = new Evalon4JParser().parse(projectPath)
+
+        if (jsonResult.hasError) {
+            // TODO handle error
+            return
+        }
+
+        def evalon4jDir = new File(projectPath + "/evalon4j")
+
+        if (evalon4jDir.exists()) { // Override the output
+            evalon4jDir.deleteDir()
+        }
+
+        evalon4jDir.mkdir()
+
+        jsonResult.data.modules.each { module ->
+            if (Evalon4JExportType.MARKDOWN == exportType) {
+                //TODO read from json file
+                def markdown = MarkdownBuilder.buildFromJsonModule(module, new Evalon4JConfiguration())
+
+                new File(evalon4jDir.absolutePath + "/${module.moduleName}.md").write(markdown)
+            }
+
+//            if (Evalon4JExportType.ASCIIDOC == exportType) {
+//                def asciidoc = new Markdown(module).toString()
+//
+//                new File(evalon4jDir.absolutePath + "${module.moduleName}.asciidoc").write(asciidoc)
+//            }
+//
+//            if (Evalon4JExportType.SWAGGER == exportType) {
+//                def swagger = new Swagger(module).toString()
+//
+//                new File(evalon4jDir.absolutePath + "${module.moduleName}_swagger.json").write(swagger)
+//            }
+//
+//            if (Evalon4JExportType.OPENAPI == exportType) {
+//                def openapi = new OpenAPI(module).toString()
+//
+//                new File(evalon4jDir.absolutePath + "${module.moduleName}_openapi.json").write(openapi)
+//            }
+        }
+
+        println i18n.complete()
     }
 
     static JSON_PROPERTIES_WHITE_LIST = [

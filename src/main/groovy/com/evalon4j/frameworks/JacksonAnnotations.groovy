@@ -5,7 +5,9 @@ import com.evalon4j.frameworks.jackson.JsonIgnoreProperties
 import com.github.javaparser.ast.expr.AnnotationExpr
 
 class JacksonAnnotations {
-    List<Annotation> annotations = []
+    JsonIgnore jsonIgnore = null
+
+    JsonIgnoreProperties jsonIgnoreProperties = null
 
     static JACKSON_ANNOTATIONS = [
             JsonIgnore,

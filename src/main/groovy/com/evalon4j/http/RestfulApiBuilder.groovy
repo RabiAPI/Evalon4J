@@ -1,6 +1,7 @@
 package com.evalon4j.http
 
 import com.evalon4j.Evalon4JTransformer
+import com.evalon4j.frameworks.JaxRSAnnotations
 import com.evalon4j.frameworks.openapi.Parameter
 import com.evalon4j.frameworks.spring.HttpStatus
 import com.evalon4j.frameworks.spring.MediaType
@@ -23,6 +24,10 @@ import com.evalon4j.utils.SwaggerDataTypes
 class RestfulApiBuilder {
     static JsonService buildRestfulApiGroups(JavaComponent javaComponent, JsonProject jsonProject) {
         def jsonService = new JsonService(javaComponent)
+
+        if (!isRestfulApi(javaComponent)) {
+            return null
+        }
 
         jsonService.isHttpService = true
 
@@ -102,36 +107,48 @@ class RestfulApiBuilder {
 
         def springAnnotations = javaComponent.springAnnotations
 
-        if (springAnnotations.restController) {
-//            if (javaComponent.extensions) { // 处理抽象Controller
-//                javaComponent.extensions.each { extension ->
-//                    if (extension instanceof JavaGenericType) {
-//                        def actualType = extension.build()
-//
-//                        if (actualType.notExists) {
-//                            return
-//                        }
-//
-//                        actualType && actualType.methods.each {javaMethod ->
-//                            def api = buildRestfulApi(javaComponent, javaMethod)
-//
-//                            api && (jsonService.methods << api)
-//                        }
-//                    }
-//
-//                    if (extension instanceof JavaReferenceType) {
-//                        if (extension.notExists) {
-//                            return
-//                        }
-//
-//                        extension.methods.each { javaMethod ->
-//                            def api = buildRestfulApi(javaComponent, javaMethod)
-//
-//                            api && (jsonService.methods << api)
-//                        }
-//                    }
-//                }
-//            }
+        if (springAnnotations.restController || springAnnotations.controller) {
+            if (javaComponent.extensions) { // 处理抽象Controller
+                javaComponent.extensions.each { extension ->
+                    if (extension instanceof JavaGenericType) {
+                        def actualType = extension.build()
+
+                        if (actualType.notExists) {
+                            return
+                        }
+
+                        actualType && actualType.methods.each { javaMethod ->
+                            def api = buildRestfulApi(javaComponent, javaMethod)
+
+                            api.basePath = formatRequestPath(api.basePath)
+
+                            api.requestPath = formatRequestPath(api.requestPath)
+
+                            api.fullRequestPath = api.basePath + api.requestPath
+
+                            api && (jsonService.methods << api)
+                        }
+                    }
+
+                    if (extension instanceof JavaReferenceType) {
+                        if (extension.notExists) {
+                            return
+                        }
+
+                        extension.methods.each { javaMethod ->
+                            def api = buildRestfulApi(javaComponent, javaMethod)
+
+                            api.basePath = formatRequestPath(api.basePath)
+
+                            api.requestPath = formatRequestPath(api.requestPath)
+
+                            api.fullRequestPath = api.basePath + api.requestPath
+
+                            api && (jsonService.methods << api)
+                        }
+                    }
+                }
+            }
 
             if (springAnnotations.requestMapping) { // 处理RequestMapping
                 def requestMapping = springAnnotations.requestMapping
@@ -1097,5 +1114,27 @@ class RestfulApiBuilder {
         }
 
         return requestPath
+    }
+
+    private static boolean isRestfulApi(JavaComponent javaComponent) {
+        def springAnnotations = javaComponent.springAnnotations
+
+        def jaxRSAnnotations = javaComponent.jaxRSAnnotations
+
+        def swaggerAnnotations = javaComponent.swaggerAnnotations
+
+        def openAPIAnnotations = javaComponent.openAPIAnnotations
+
+        if (!springAnnotations && !jaxRSAnnotations && !swaggerAnnotations && !openAPIAnnotations) {
+            return false
+        }
+
+        if (javaComponent.springAnnotations) {
+            return javaComponent.springAnnotations.controller ||
+                    javaComponent.springAnnotations.restController ||
+                    javaComponent.springAnnotations.feignClient
+        }
+
+        return true
     }
 }

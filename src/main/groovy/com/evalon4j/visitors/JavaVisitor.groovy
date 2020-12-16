@@ -2,6 +2,7 @@ package com.evalon4j.visitors
 
 
 import com.evalon4j.java.*
+import com.evalon4j.java.types.JavaGenericType
 import com.evalon4j.java.types.JavaReferenceType
 import com.evalon4j.json.JsonError
 import com.github.javaparser.ast.ImportDeclaration
@@ -83,7 +84,19 @@ class JavaVisitor extends VoidVisitorAdapter<JavaProject> {
 
         javaComponent.openAPIAnnotations = new JavaAnnotationsBuilder(javaComponent, referenceTypes).buildOpenAPIAnnotations(n.annotations)
 
+        javaComponent.jacksonAnnotations = new JavaAnnotationsBuilder(javaComponent, referenceTypes).buildJacksonAnnotations(n.annotations)
+
         JavadocHelper.setJavadoc(javaComponent, n)
+
+        n.extendedTypes.each {
+            def extendedType = new JavaAbstractTypeBuilder(moduleName, packageName, imports).buildFieldTypeRecursive(n.extendedTypes.first())
+
+            if (extendedType instanceof JavaReferenceType || extendedType instanceof JavaGenericType) { // 排除非引用类型的继承
+                JavaVisitorHelper.setQualifiedNameForJavaAbstractType(imports, packageName, extendedType)
+
+                javaComponent.extensions = [extendedType]
+            }
+        }
 
         n.methods.each { methodDeclaration ->
             try {
@@ -138,6 +151,8 @@ class JavaVisitor extends VoidVisitorAdapter<JavaProject> {
                 javaField.openAPIAnnotations = new JavaAnnotationsBuilder(javaComponent, referenceTypes).buildOpenAPIAnnotations(p.annotations)
 
                 javaField.validationAnnotations = new JavaAnnotationsBuilder(javaComponent, referenceTypes).buildValidationAnnotations(p.annotations)
+
+                javaField.jacksonAnnotations = new JavaAnnotationsBuilder(javaComponent, referenceTypes).buildJacksonAnnotations(p.annotations)
 
                 javaMethod.parameters << javaField
             } catch (Exception e) {

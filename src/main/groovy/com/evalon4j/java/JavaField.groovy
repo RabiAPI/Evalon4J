@@ -1,6 +1,6 @@
 package com.evalon4j.java
 
-
+import com.evalon4j.frameworks.JacksonAnnotations
 import com.evalon4j.frameworks.JaxRSAnnotations
 import com.evalon4j.frameworks.OpenAPIAnnotations
 import com.evalon4j.frameworks.SpringAnnotations
@@ -28,6 +28,8 @@ class JavaField extends JavadocComponent {
 
     boolean isDeprecated = false
 
+    boolean isIgnore = false
+
     SpringAnnotations springAnnotations = null
 
     JaxRSAnnotations jaxRSAnnotations = null
@@ -37,6 +39,8 @@ class JavaField extends JavadocComponent {
     OpenAPIAnnotations openAPIAnnotations = null
 
     ValidationAnnotations validationAnnotations = null
+
+    JacksonAnnotations jacksonAnnotations = null
 
     String getFieldQualifiedName() {
         if (fieldType instanceof JavaGenericType && fieldType.genericType instanceof JavaReferenceType) {

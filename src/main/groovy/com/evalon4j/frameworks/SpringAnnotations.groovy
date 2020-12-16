@@ -1,5 +1,6 @@
 package com.evalon4j.frameworks
 
+import com.evalon4j.frameworks.spring.Controller
 import com.evalon4j.frameworks.spring.ResponseStatus
 import com.evalon4j.frameworks.spring.controller.ControllerAdvice
 import com.evalon4j.frameworks.spring.RestController
@@ -12,6 +13,8 @@ import com.github.javaparser.ast.expr.AnnotationExpr
 
 class SpringAnnotations {
     // Class Level
+
+    Controller controller = null
 
     RestController restController = null
 
@@ -58,6 +61,7 @@ class SpringAnnotations {
     Validated validated = null
 
     static SPRING_ANNOTATIONS = [
+            Controller,
             RestController,
             ControllerAdvice,
             ExceptionHandler,

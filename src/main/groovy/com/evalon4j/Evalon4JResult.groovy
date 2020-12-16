@@ -1,5 +1,7 @@
 package com.evalon4j
 
+import com.evalon4j.json.JsonProject
+
 class Evalon4JResult {
     boolean hasError = false
 
@@ -9,5 +11,5 @@ class Evalon4JResult {
 
     List<String> errorTraces = []
 
-    Object data = null
+    JsonProject data = null
 }
