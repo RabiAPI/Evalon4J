@@ -107,7 +107,7 @@ class RestfulApiBuilder {
 
         def springAnnotations = javaComponent.springAnnotations
 
-        if (springAnnotations.restController) {
+        if (springAnnotations.restController || springAnnotations.controller) {
             if (javaComponent.extensions) { // 处理抽象Controller
                 javaComponent.extensions.each { extension ->
                     if (extension instanceof JavaGenericType) {

@@ -38,12 +38,12 @@ You can also put a `evalon4j.json` file under your project root, or using `-c` t
 }
 ```
 
-### Road Map
+## Road Map
 
 - [ ] Export documentation as a static website
 - [ ] Support `ApidocJS` Framework
 
-### Features
+## Features
 
 - Simple command line tool, no massive dependencies, I swear.
 - Pure Static Analysis, no need to build or compile your project, no waste of time.
@@ -51,7 +51,7 @@ You can also put a `evalon4j.json` file under your project root, or using `-c` t
 - Complete support javadoc
 - Complete support java enumeration
 
-### Supported Frameworks
+## Supported Frameworks
 
 - Pure Java `interface` and javadoc, used for RPC Service
 - Spring MVC
@@ -60,11 +60,11 @@ You can also put a `evalon4j.json` file under your project root, or using `-c` t
 - OpenAPI 3.0 Annotations
 - JSR303 Bean Validation Annotations
 
-### Supported Export Format
+## Supported Export Format
 
-- markdown
-- swagger 2.0 json file
-- openapi 3.0 json file
+- markdown (complete)
+- swagger 2.0 json file (developing)
+- openapi 3.0 json file (developing)
 
 ## Contact Me
 
