@@ -14,19 +14,41 @@ import com.evalon4j.json.JsonService
 class MarkdownBuilder {
     static i18n = new Evalon4Ji18n()
 
-    static String buildFromJsonModule(JsonModule jsonModule, Evalon4JConfiguration cfg) {
+    static String buildFromJsonModule(JsonModule jsonModule) {
+        Evalon4JConfiguration cfg = jsonModule.cfg
+
         def md = ""
 
         md += Markdown.h1(jsonModule.moduleName)
 
-        if (cfg.summary) {
-            md += Markdown.text(cfg.summary)
+        md += Markdown.infoTable(cfg)
+
+        if (cfg.onlyHttpApi) {
+            md += transformRestfulAPIsToMarkdown(jsonModule, cfg)
+
+            return md
         }
 
-        md += Markdown.infoTable(cfg)
+        if (cfg.onlyJavaApi) {
+            md += transformJavaAPIsToMarkdown(jsonModule, cfg)
+
+            return md
+        }
+
+        md += transformRestfulAPIsToMarkdown(jsonModule, cfg)
+
+        md += transformJavaAPIsToMarkdown(jsonModule, cfg)
+
+        return md
+    }
+
+    static String transformRestfulAPIsToMarkdown(JsonModule jsonModule, Evalon4JConfiguration cfg) {
+        String md = ""
 
         if (jsonModule.restfulApis) {
             md += Markdown.h2("HTTP API")
+        } else {
+            return md
         }
 
         jsonModule.restfulApis.each { jsonService ->
@@ -40,12 +62,12 @@ class MarkdownBuilder {
 
             md += Markdown.h3(ExportHelper.getServiceSummary(jsonService))
 
-            md += Markdown.text(ExportHelper.getServiceDescription(jsonService))
+            md += Markdown.html(ExportHelper.getServiceDescription(jsonService))
 
             jsonService.methods.each { jsonMethod ->
                 md += Markdown.h4(ExportHelper.getMethodSummary(jsonMethod))
 
-                md += Markdown.text(ExportHelper.getMethodDescription(jsonMethod))
+                md += Markdown.html(ExportHelper.getMethodDescription(jsonMethod))
 
                 md += Markdown.tags(jsonMethod.tags)
 
@@ -112,9 +134,17 @@ class MarkdownBuilder {
             }
         }
 
-//        if (!ExportHelper.isEmpty(jsonModule.javaServices)) {
-//            Markdown.h2(md, "JAVA API")
-//        }
+        return md
+    }
+
+    static String transformJavaAPIsToMarkdown(JsonModule jsonModule, Evalon4JConfiguration cfg) {
+        String md = ""
+
+        if (jsonModule.javaServices) {
+            md += Markdown.h2("JAVA API")
+        } else {
+            return md
+        }
 
         jsonModule.javaServices.each { jsonService ->
             if (isExcludedService(cfg, jsonService)) {
@@ -127,12 +157,12 @@ class MarkdownBuilder {
 
             md += Markdown.h3(ExportHelper.getServiceSummary(jsonService))
 
-            md += Markdown.text(ExportHelper.getServiceDescription(jsonService))
+            md += Markdown.html(ExportHelper.getServiceDescription(jsonService))
 
             jsonService.methods.each { jsonMethod ->
                 md += Markdown.h4(ExportHelper.getMethodSummary(jsonMethod))
 
-                md += Markdown.text(ExportHelper.getMethodDescription(jsonMethod))
+                md += Markdown.html(ExportHelper.getMethodDescription(jsonMethod))
 
                 md += Markdown.tags(jsonMethod.tags)
 
