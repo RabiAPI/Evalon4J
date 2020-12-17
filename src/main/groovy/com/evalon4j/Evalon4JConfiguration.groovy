@@ -17,7 +17,7 @@ class Evalon4JConfiguration {
 
     String version = ""
 
-    String summary = ""
+    String description = ""
 
     /**
      * Service Name or Service Qualified Name

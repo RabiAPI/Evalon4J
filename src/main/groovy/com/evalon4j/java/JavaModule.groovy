@@ -11,5 +11,5 @@ class JavaModule {
 
     OpenAPIDefinition openAPIDefinition = null
 
-    Evalon4JConfiguration evalon4JConfiguration = null
+    Evalon4JConfiguration cfg = new Evalon4JConfiguration()
 }

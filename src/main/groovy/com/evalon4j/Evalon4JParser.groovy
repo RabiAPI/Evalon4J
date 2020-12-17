@@ -12,6 +12,7 @@ import com.evalon4j.visitors.JavaReferenceBuilder
 import com.evalon4j.visitors.JavaReferenceVisitor
 import com.evalon4j.visitors.JavaVisitor
 import com.github.javaparser.JavaParser
+import groovy.json.JsonSlurper
 
 class Evalon4JParser {
     Evalon4JResult parse(String projectPath) {
@@ -125,7 +126,25 @@ class Evalon4JParser {
         return result
     }
 
+    static final String EVALON4J_JSON = "evalon4j.json"
+
     static void buildJavaModule(JavaProject javaProject, File moduleDir) {
-        javaProject.modules << new JavaModule(moduleName: moduleDir.name)
+        Evalon4JConfiguration cfg = new Evalon4JConfiguration()
+
+        File file = moduleDir.listFiles().find {
+            it.name == EVALON4J_JSON
+        }
+
+        if (file) {
+            try {
+                def jsonSlurper = new JsonSlurper()
+
+                cfg = new Evalon4JConfiguration(jsonSlurper.parse(file) as Map)
+            } catch (Exception e) {
+                println "Parse evalon4j.json Failed: " + e.message
+            }
+        }
+
+        javaProject.modules << new JavaModule(moduleName: moduleDir.name, cfg: cfg)
     }
 }

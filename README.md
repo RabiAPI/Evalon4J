@@ -26,15 +26,27 @@ Evalon4J is a command line tool and very easy to use.
 
 ## Configuration
 
-You can also put a `evalon4j.json` file under your project root, or using `-c` to specify one.
+You can also put a `evalon4j.json` file under your module or project root (if not multiple module project), or using `-c` to specify one.
 
 ```json
 {
-  "name": "Your awesome project",
-  "author": "whitecoms0s_",
-  "version": "1.0.0",
-  "includedServices": [],
-  "excludedServices": [],
+  "name": "", // Project Name
+  
+  "author": "whitecoms0s_", // Project Author
+  
+  "version": "1.0", // API Version, Default is 1.0
+  
+  "includedServices": [], // Included services, service name or service qualified name 
+  
+  "excludedServices": [], // Excluded services, service name or service qualified name
+  
+  "dependencies": [], // Source jars path, (developing)
+  
+  "onlyHttpApi": false, // Only Export HTTP API
+  
+  "onlyJavaApi": false, // Only Export Java API (interface)
+  
+  "locale": "zh", // Set Export Locale，en or zh，If not set, using system locale
 }
 ```
 

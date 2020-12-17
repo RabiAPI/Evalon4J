@@ -57,6 +57,16 @@ class Markdown {
         return text + LFLF
     }
 
+    static html(String text) {
+        def html = "```html" + LF
+
+        html += text + LF
+
+        html += "```" + LF
+
+        return html
+    }
+
     static tags(List<KeyValueTag> tags = []) {
         def val = ""
 
@@ -94,7 +104,7 @@ class Markdown {
     }
 
     static FIELD_TYPE_NAME_CLOSURE = (JsonStruct jsonStruct) -> {
-        return jsonStruct.fieldTypeName
+        return jsonStruct.fieldTypeName + (jsonStruct.jsonTypeName ? " (${jsonStruct.jsonTypeName}) " : "")
     }
 
     static FIELD_REQUIRED_CLOSURE = (JsonStruct jsonStruct) -> {
@@ -104,6 +114,10 @@ class Markdown {
     static FIELD_SUMMARY_CLOSURE = (JsonStruct jsonStruct) -> {
         return jsonStruct.fieldSummary ? jsonStruct.fieldSummary : "/"
     }
+
+    static FIELD_NAME_COLUMN = "fieldName"
+
+    static FIELD_TYPE_COLUMNS = ["fieldTypeName", "jsonTypeName"]
 
     static infoTable(Evalon4JConfiguration cfg) {
         def configs = [
@@ -133,7 +147,7 @@ class Markdown {
                         columnName: "Description",
                         columnWidth: 32,
                         callback: (JsonStruct jsonStruct) -> {
-                            return cfg.summary ? cfg.summary : "/"
+                            return cfg.description ? cfg.description: "/"
                         }
                 ),
         ]
@@ -146,7 +160,7 @@ class Markdown {
         def configs = [
                 new MarkdownTableColumn(
                         columnName: "Name",
-                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldName", 24),
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, FIELD_NAME_COLUMN, 24),
                         indent: true,
                         callback: FIELD_NAME_CLOSURE
                 ),
@@ -157,7 +171,7 @@ class Markdown {
                 ),
                 new MarkdownTableColumn(
                         columnName: "Type",
-                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldTypeName", 24),
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, FIELD_TYPE_COLUMNS, 24),
                         callback: FIELD_TYPE_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(
@@ -174,7 +188,7 @@ class Markdown {
         def configs = [
                 new MarkdownTableColumn(
                         columnName: "Name",
-                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldName", 24),
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, FIELD_NAME_COLUMN, 24),
                         indent: true,
                         callback: FIELD_NAME_CLOSURE,
                 ),
@@ -197,7 +211,7 @@ class Markdown {
         def configs = [
                 new MarkdownTableColumn(
                         columnName: "Name",
-                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldName", 24),
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, FIELD_NAME_COLUMN, 24),
                         indent: true,
                         callback: FIELD_NAME_CLOSURE
                 ),
@@ -208,7 +222,7 @@ class Markdown {
                 ),
                 new MarkdownTableColumn(
                         columnName: "Type",
-                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, "fieldTypeName", 24),
+                        columnWidth: MarkdownHelper.getColumnWidth(jsonStructs, FIELD_TYPE_COLUMNS, 24),
                         callback: FIELD_TYPE_NAME_CLOSURE
                 ),
                 new MarkdownTableColumn(

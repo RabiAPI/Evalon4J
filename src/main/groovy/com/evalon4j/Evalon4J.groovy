@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.serializer.PropertyFilter
 import com.alibaba.fastjson.serializer.SerializerFeature
 import com.evalon4j.export.markdown.MarkdownBuilder
+import com.evalon4j.json.JsonModule
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 
@@ -94,10 +95,9 @@ class Evalon4J {
 
         evalon4jDir.mkdir()
 
-        jsonResult.data.modules.each { module ->
+        jsonResult.data.modules.each { JsonModule module ->
             if (Evalon4JExportType.MARKDOWN == exportType) {
-                //TODO read from json file
-                def markdown = MarkdownBuilder.buildFromJsonModule(module, new Evalon4JConfiguration())
+                def markdown = MarkdownBuilder.buildFromJsonModule(module)
 
                 new File(evalon4jDir.absolutePath + "/${module.moduleName}.md").write(markdown)
             }
