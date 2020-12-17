@@ -16,7 +16,7 @@ Evalon4J is a command line tool and very easy to use.
 1. Download the zip file and extract it.
 2. Get into the `bin` directory from terminal.
 3. Execute `./evalon4j -p {{Your Java Project Path}} -o markdown`
-4. Done
+4. The `evalon4j` dir will be generated under your project root path
 
 ## Parameters
 
