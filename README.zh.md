@@ -1,4 +1,4 @@
-# Evalon4J - 通过命令行直接生成Java项目API文档
+# Evalon4J - 终级Java API文档生成工具
 
 ## 介绍
 
@@ -18,6 +18,10 @@ Evalon4J是一个命令行工具，使用起来非常简单。
 2. 解压并进入`bin`文件夹
 3. 执行 `./evalon4j -p {{你的Java项目根目录}} -o markdown`
 
+## 测试项目
+
+通过 [Pet-Store](https://gitee.com/RabiAPI/pet-store) 项目你可以测试 Evalon4J 的各种功能，同时项目内包含已生成的`evalon4j`文件夹，你可以直接查看生成结果。
+
 ## 参数说明
 
 - `-p`，指定需要生成文档的Java项目根目录，文档默认会生成在项目文件夹内
@@ -26,29 +30,41 @@ Evalon4J是一个命令行工具，使用起来非常简单。
 
 ## 配置文件
 
-你可以在项目根目录下提供一份 `evalon4j.json` 配置文件，运行时会自动读取。
+你可以在项目根目录或模块目录(如果是多模块项目)下提供一份 `evalon4j.json` 配置文件，运行时会自动读取。该配置不是必须的。
 
 ```json
 {
-  "name": "", // 项目名称
+  "name": "",
   
-  "author": "whitecoms0s_", // 项目维护者
+  "author": "whitecoms0s_", 
   
-  "version": "1.0", // 文档版本，默认为1.0
+  "version": "1.0", 
   
-  "includedServices": [], // 需要导出的服务名称或全名，白名单
+  "includedServices": [], 
   
-  "excludedServices": [], // 需要过滤的服务名称或全名，黑名单
+  "excludedServices": [], 
   
-  "dependencies": [], // 项目依赖的源码包路径列表，(规划中)
+  "dependencies": [], 
   
-  "onlyHttpApi": false, // 仅导出HTTP接口
+  "onlyHttpApi": false, 
   
-  "onlyJavaApi": false, // 仅导出RPC接口
+  "onlyJavaApi": false, 
   
-  "locale": "zh", // en 或 zh，会覆盖系统语言设置，没有该字段默认使用系统语言设置
+  "locale": "default",
 }
 ```
+
+配置项说明:
+
+- `name` 项目名称
+- `author` 项目维护者
+- `version` 文档版本，默认为 1.0
+- `includedServices` 需要导出的服务名称或全名，白名单
+- `excludedServices` 需要过滤的服务名称或全名，黑名单
+- `dependencies` 项目依赖的源码包路径列表，(`开发中`)
+- `onlyHttpApi` 仅导出HTTP接口
+- `onlyJavaApi` 仅导出RPC接口 
+- `locale` 导出的语言设置，默认使用系统语言， zh 中文 或者 en 英文
 
 ## 生成结果预览
 

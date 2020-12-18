@@ -18,6 +18,10 @@ Evalon4J is a command line tool and very easy to use.
 3. Execute `./evalon4j -p {{Your Java Project Path}} -o markdown`
 4. Done
 
+## Demo Project
+
+From [Pet-Store](https://gitee.com/RabiAPI/pet-store) you can test Evalon4J，the `evalon4j` dir already contains the generation results, so you check out what it's looks like.
+
 ## Parameters
 
 - `-p` specify the java project path, the output will be there and named as `evalon4j`
@@ -28,27 +32,41 @@ Evalon4J is a command line tool and very easy to use.
 
 You can also put a `evalon4j.json` file under your module or project root (if not multiple module project), or using `-c` to specify one.
 
+This is not required.
+
 ```json
 {
-  "name": "", // Project Name
+  "name": "",
   
-  "author": "whitecoms0s_", // Project Author
+  "author": "whitecoms0s_", 
   
-  "version": "1.0", // API Version, Default is 1.0
+  "version": "1.0", 
   
-  "includedServices": [], // Included services, service name or service qualified name 
+  "includedServices": [],  
   
-  "excludedServices": [], // Excluded services, service name or service qualified name
+  "excludedServices": [], 
   
-  "dependencies": [], // Source jars path, (developing)
+  "dependencies": [], 
   
-  "onlyHttpApi": false, // Only Export HTTP API
+  "onlyHttpApi": false, 
   
-  "onlyJavaApi": false, // Only Export Java API (interface)
+  "onlyJavaApi": false, 
   
-  "locale": "zh", // Set Export Locale，en or zh，If not set, using system locale
+  "locale": "default", 
 }
 ```
+
+Configurations:
+
+- `name` Project Name
+- `author` Project Author
+- `version` Project Version default 1.0
+- `includedServices` Included services, service name or service qualified name
+- `excludedServices` Excluded services, service name or service qualified name
+- `dependencies` Source jars path, (developing)
+- `onlyHttpApi` Only Export HTTP API (Spring / JAX-RS / Swagger / OpenAPI)
+- `onlyJavaApi` Only Export Java API (interface)
+- `locale` Set Export Locale，en or zh，If not set, using system locale
 
 ## Road Map
 
