@@ -37,7 +37,7 @@ class Evalon4Ji18n {
 
                     responseHeaders: "Response Headers",
 
-                    exceptions: "Exceptions"
+                    exceptions     : "Exceptions"
             ]
     ]
 
@@ -67,15 +67,19 @@ class Evalon4Ji18n {
 
                     responseHeaders: "响应头部",
 
-                    exceptions: "抛出异常"
+                    exceptions     : "抛出异常"
             ]
     ]
 
-    Evalon4Ji18n() {
-        this.LANG = System.getProperty("user.language", "en")
+    Evalon4Ji18n(String lang) {
+        if (lang) {
+            this.LANG = lang
+        } else {
+            this.LANG = System.getProperty("user.language", "en")
 
-        if (LANG !== ZH) { // Default
-            LANG = EN
+            if (LANG !== ZH) { // Default
+                LANG = EN
+            }
         }
     }
 
@@ -107,7 +111,11 @@ class Evalon4Ji18n {
             return """
             欢迎使用Evalon4J
     
-            项目主页: https://gitee.com/RabiAPI/evalon4j
+            项目主页: 
+            
+            https://gitee.com/RabiAPI/evalon4j
+            
+            https://github.com/RabiAPI/Evalon4J
     
             产品支持QQ群: 244365684
     
