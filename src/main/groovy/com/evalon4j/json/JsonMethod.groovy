@@ -8,6 +8,13 @@ import com.evalon4j.java.JavaMethod
 import com.evalon4j.java.KeyValueTag
 
 class JsonMethod {
+    /**
+     * Unique Id of this operation
+     *
+     * serviceQualifiedName + methodName + methodIndex
+     */
+    String operationId = ""
+
     String serviceName
 
     String serviceQualifiedName

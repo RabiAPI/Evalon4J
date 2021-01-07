@@ -5,6 +5,7 @@ import com.evalon4j.java.*
 import com.evalon4j.json.*
 import com.evalon4j.transformer.JsonConstraintTransformer
 import com.evalon4j.transformer.JsonStructTransformer
+import org.jsoup.Jsoup
 
 class Evalon4JTransformer {
     static JsonProject transform(JavaProject javaProject) {
@@ -100,7 +101,19 @@ class Evalon4JTransformer {
             }
         }
 
+        filterHtmlInSummary(jsonServices)
+
         return jsonServices
+    }
+
+    static filterHtmlInSummary(List<JsonService> jsonServices) {
+        jsonServices.each { jsonService ->
+            jsonService.summary && (jsonService.summary = Jsoup.parse(jsonService.summary).text())
+
+            jsonService.methods.each { jsonMethod ->
+                jsonMethod.summary && (jsonMethod.summary = Jsoup.parse(jsonMethod.summary).text())
+            }
+        }
     }
 
     static List<JsonService> transformJavaServices(JavaProject javaProject, JsonProject jsonProject) {
@@ -137,6 +150,8 @@ class Evalon4JTransformer {
                 jsonProject.errors << new JsonError(e)
             }
         }
+
+        filterHtmlInSummary(jsonServices)
 
         return jsonServices
     }
