@@ -13,11 +13,11 @@ class Evalon4JTransformer {
 
         List<JsonService> jsonServices = transformJavaServices(javaProject, jsonProject)
 
-        List<JsonStruct> jsonModels = extractJsonStructs(jsonServices)
+        List<JsonStruct> jsonModels = extractJsonStructs(jsonServices, javaProject)
 
         List<JsonService> restfulApis = transformRestfulApiGroups(javaProject, jsonProject)
 
-        List<JsonStruct> restfulApiModels = extractJsonStructs(restfulApis)
+        List<JsonStruct> restfulApiModels = extractJsonStructs(restfulApis, javaProject)
 
         if (isSingleModule(javaProject)) {
             def jsonModule = new JsonModule(javaProject.modules.first())
@@ -182,7 +182,7 @@ class Evalon4JTransformer {
         return jsonMethod
     }
 
-    static List<JsonStruct> extractJsonStructs(List<JsonService> jsonServices) {
+    static List<JsonStruct> extractJsonStructs(List<JsonService> jsonServices, JavaProject javaProject) {
         List<JsonStruct> structs = []
 
         Closure iterator
@@ -192,23 +192,29 @@ class Evalon4JTransformer {
                 return
             }
 
-            if (jsonStruct.isStructType && !jsonStruct.notExists) {
-                structs << jsonStruct
+            if (!jsonStruct.qualifiedName) {
+                return
             }
 
-            if (jsonStruct.isEnumType && !jsonStruct.notExists) {
-                structs << jsonStruct
+            if (jsonStruct.notExists) {
+                return
             }
+
+            def existsJsonStruct = structs.find {
+                it.qualifiedName == jsonStruct.qualifiedName
+            }
+
+            if (existsJsonStruct) {
+                return
+            }
+
+            def reference = javaProject.references.find {reference ->
+                reference.qualifiedName == jsonStruct.qualifiedName
+            }
+
+            structs << JsonStructTransformer.transformJavaAbstractTypeToJsonStruct(reference)
 
             jsonStruct.children.each { child ->
-                if (child.isStructType) {
-                    structs << child
-                }
-
-                if (child.isEnumType) {
-                    structs << child
-                }
-
                 iterator(child)
             }
         }

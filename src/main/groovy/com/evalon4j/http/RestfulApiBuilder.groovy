@@ -1,7 +1,6 @@
 package com.evalon4j.http
 
 import com.evalon4j.Evalon4JTransformer
-import com.evalon4j.frameworks.JaxRSAnnotations
 import com.evalon4j.frameworks.openapi.Parameter
 import com.evalon4j.frameworks.spring.HttpStatus
 import com.evalon4j.frameworks.spring.MediaType
@@ -452,11 +451,22 @@ class RestfulApiBuilder {
 
             // 基本类型绑定
 
+            if (JavaTypeUtils.isFileType(parameter.fieldType)) {
+                jsonStruct.isFileType = true
+
+                jsonStruct.parameterType = RestfulApiParameterType.MULTIPART
+
+                if (!parameter.springAnnotations) {
+                    jsonMethod.parameters << jsonStruct
+
+                    return
+                }
+            }
+
             if (JavaTypeUtils.isStringType(parameter.fieldType)
                     || JavaTypeUtils.isNumberType(parameter.fieldType)
                     || JavaTypeUtils.isBooleanType(parameter.fieldType)
-                    || JavaTypeUtils.isDatetimeType(parameter.fieldType)
-                    || JavaTypeUtils.isFileType(parameter.fieldType)) {
+                    || JavaTypeUtils.isDatetimeType(parameter.fieldType)) {
                 if (jsonMethod.requestMethod == "GET") {
                     jsonStruct.parameterType = RestfulApiParameterType.QUERY
                 } else {
@@ -554,6 +564,10 @@ class RestfulApiBuilder {
                 requestPart.name && (jsonStruct.fieldName = requestPart.name)
 
                 jsonStruct.parameterType = RestfulApiParameterType.MULTIPART
+
+                if (JavaTypeUtils.isFileType(parameter.fieldType)) {
+                    jsonStruct.isFileType = true
+                }
 
                 jsonStruct.isRequired = requestPart.required
 

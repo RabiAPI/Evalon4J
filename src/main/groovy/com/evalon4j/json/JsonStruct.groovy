@@ -73,6 +73,8 @@ class JsonStruct extends JavadocComponent {
 
     boolean isEnumValue = false
 
+    boolean isFileType = false
+
     String enumValue = ""
 
     // struct not exists in project, need source jar
