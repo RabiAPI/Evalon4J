@@ -7,6 +7,7 @@ import com.evalon4j.frameworks.apidocjs.pojos.ApidocFields
 import com.evalon4j.frameworks.apidocjs.pojos.ApidocPayload
 import com.evalon4j.http.RestfulApiParameterType
 import com.evalon4j.json.*
+import org.jsoup.Jsoup
 
 /**
  * transform apidoc json data to evalon4j format
@@ -49,7 +50,7 @@ class ApidocTransformer {
             def group = groups[endpoint.group]
 
             if (!group) {
-                def jsonService = new JsonService(serviceName: endpoint.group, summary: endpoint.groupTitle, description: endpoint.groupDescription)
+                def jsonService = new JsonService(serviceName: endpoint.group, summary: endpoint.groupTitle, description: toText(endpoint.groupDescription))
 
                 groups[endpoint.group] = jsonService
 
@@ -69,7 +70,7 @@ class ApidocTransformer {
 
         jsonMethod.summary = endpoint.title
 
-        jsonMethod.description = endpoint.description
+        jsonMethod.description = toText(endpoint.description)
 
         jsonMethod.requestMethod = endpoint.type
 
@@ -163,7 +164,7 @@ class ApidocTransformer {
 
         parameter.parameterType = parameterType
 
-        parameter.fieldSummary = f.description
+        parameter.fieldSummary = toText(f.description)
 
         parameter.isRequired = !f.optional // required <-> optional
 
@@ -254,7 +255,7 @@ class ApidocTransformer {
 
             last.fieldTypeName = f.type
 
-            last.fieldSummary = f.description
+            last.fieldSummary = toText(f.description)
 
             last.isRequired = !f.optional // required <-> optional
 
@@ -264,5 +265,9 @@ class ApidocTransformer {
         }
 
         return jsonStructs
+    }
+
+    String toText(String description) {
+        return description ? Jsoup.parse(description).text() : ''
     }
 }
