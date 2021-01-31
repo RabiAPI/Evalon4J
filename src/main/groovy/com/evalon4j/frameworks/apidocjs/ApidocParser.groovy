@@ -22,11 +22,11 @@ class ApidocParser {
         this.projectPath = projectPath
     }
 
-    Evalon4JResult parse(String apidocJSPayload) {
+    Evalon4JResult parse(String apidocStr) {
         def result = new Evalon4JResult()
 
         try {
-            Object payload = JSON.parse(apidocJSPayload)
+            Object payload = JSON.parse(apidocStr)
 
             def apidocPayload = new ApidocPayload()
 
@@ -43,8 +43,6 @@ class ApidocParser {
             return result
 
         } catch (Exception e) {
-            e.printStackTrace()
-
             result.hasError = true
 
             result.errorMessage = "Resolve Apidoc Error: " + e.getMessage()
@@ -60,7 +58,7 @@ class ApidocParser {
 
         jsonProject.projectName = projectName
 
-        jsonProject.projectPath = projectName
+        jsonProject.projectPath = projectPath
 
         jsonProject.modules.first().moduleName = projectName
     }

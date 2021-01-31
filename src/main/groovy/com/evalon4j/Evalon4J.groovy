@@ -93,13 +93,13 @@ class Evalon4J {
 
         options.addOption("o", true, "Output Directory")
 
-        options.addOption("c", false, "Configuration")
+        options.addOption("c", true, "Configuration")
 
         options.addOption("h", false, "Help")
 
         options.addOption("help", false, "Help")
 
-        options.addOption("apidoc", false, "Apidocjs Parsed Payload")
+        options.addOption("apidoc", true, "Apidocjs Parsed Payload")
 
         return options
     }
@@ -114,8 +114,8 @@ class Evalon4J {
         println resultStr
     }
 
-    static handleExportApidocJSFormat(String projectPath, String apidocJSPayload) {
-        def result = new ApidocParser(projectPath).parse(apidocJSPayload)
+    static handleExportApidocJSFormat(String projectPath, String apidocStr) {
+        def result = new ApidocParser(projectPath).parse(apidocStr)
 
         JSON.DEFAULT_GENERATE_FEATURE |= SerializerFeature.DisableCircularReferenceDetect.getMask()
 

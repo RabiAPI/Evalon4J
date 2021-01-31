@@ -24,8 +24,6 @@ class ApidocTransformer {
     JsonProject transform(ApidocPayload payload) {
         def project = new JsonProject()
 
-        project.projectName = payload.project.name
-
         project.projectType = PROJECT_TYPE
 
         def module = new JsonModule()
@@ -52,6 +50,8 @@ class ApidocTransformer {
             if (!group) {
                 def jsonService = new JsonService(serviceName: endpoint.group, summary: endpoint.groupTitle, description: toText(endpoint.groupDescription))
 
+                jsonService.isHttpService = true
+
                 groups[endpoint.group] = jsonService
 
                 group = groups[endpoint.group]
@@ -66,15 +66,23 @@ class ApidocTransformer {
     JsonMethod buildJsonMethodFromApidocEndpoint(ApidocEndpoint endpoint) {
         def jsonMethod = new JsonMethod()
 
+        jsonMethod.isHttpService = true
+
         jsonMethod.methodName = endpoint.name
 
         jsonMethod.summary = endpoint.title
 
         jsonMethod.description = toText(endpoint.description)
 
-        jsonMethod.requestMethod = endpoint.type
+        jsonMethod.requestMethod = endpoint.type ? endpoint.type.toUpperCase() : "GET" // Default using GET
 
         jsonMethod.requestPath = endpoint.url
+
+        jsonMethod.fullRequestPath = endpoint.url
+
+        jsonMethod.headers = this.buildHeadersFromApidocEndpoint(endpoint)
+
+        jsonMethod.parameters = this.buildParametersFromApidocEndpoint(endpoint)
 
         jsonMethod.headers = this.buildHeadersFromApidocEndpoint(endpoint)
 
@@ -83,6 +91,10 @@ class ApidocTransformer {
         jsonMethod.responses = this.buildResponseFromApidocEndpoint(endpoint)
 
         return jsonMethod
+    }
+
+    void addVersionTagToJsonMethod(ApidocEndpoint endpoint) {
+        // TODO
     }
 
     List<JsonStruct> buildHeadersFromApidocEndpoint(ApidocEndpoint endpoint) {
@@ -160,7 +172,7 @@ class ApidocTransformer {
 
         parameter.fieldName = f.field
 
-        parameter.fieldTypeName = f.type
+        parameter.fieldTypeName = f.type ? f.type : "String" // Default using String
 
         parameter.parameterType = parameterType
 
@@ -253,7 +265,7 @@ class ApidocTransformer {
 
             def last = queue.last()
 
-            last.fieldTypeName = f.type
+            last.fieldTypeName = f.type ? f.type : "String"
 
             last.fieldSummary = toText(f.description)
 

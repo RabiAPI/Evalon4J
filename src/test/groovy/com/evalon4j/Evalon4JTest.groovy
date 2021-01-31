@@ -30,10 +30,6 @@ class Evalon4JTest {
         String projectPath = "/Users/whitecosm0s/Repository/rabiapi-demo-project"
 
         String doc = Evalon4J.handleExportEvalon4JFormat(projectPath)
-
-        File f = new File("/Users/whitecosm0s/Desktop/rabiapi-demo-project.json")
-
-        f.write(doc)
     }
 
     @Test
