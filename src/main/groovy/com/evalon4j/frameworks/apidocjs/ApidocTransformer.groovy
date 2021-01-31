@@ -6,6 +6,7 @@ import com.evalon4j.frameworks.apidocjs.pojos.ApidocField
 import com.evalon4j.frameworks.apidocjs.pojos.ApidocFields
 import com.evalon4j.frameworks.apidocjs.pojos.ApidocPayload
 import com.evalon4j.http.RestfulApiParameterType
+import com.evalon4j.java.KeyValueTag
 import com.evalon4j.json.*
 import org.jsoup.Jsoup
 
@@ -90,11 +91,19 @@ class ApidocTransformer {
 
         jsonMethod.responses = this.buildResponseFromApidocEndpoint(endpoint)
 
+        jsonMethod.isDeprecated = (endpoint.deprecated != null)
+
+        addVersionTagToJsonMethod(jsonMethod, endpoint)
+
         return jsonMethod
     }
 
-    void addVersionTagToJsonMethod(ApidocEndpoint endpoint) {
-        // TODO
+    void addVersionTagToJsonMethod(JsonMethod jsonMethod, ApidocEndpoint endpoint) {
+        if (!endpoint.version) {
+            return
+        }
+
+        jsonMethod.tags << new KeyValueTag(tagName: "version", tagValue: endpoint.version)
     }
 
     List<JsonStruct> buildHeadersFromApidocEndpoint(ApidocEndpoint endpoint) {
