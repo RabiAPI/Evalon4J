@@ -6,6 +6,7 @@ import com.evalon4j.frameworks.OpenAPIAnnotations
 import com.evalon4j.frameworks.SpringAnnotations
 import com.evalon4j.frameworks.SwaggerAnnotations
 import com.evalon4j.frameworks.ValidationAnnotations
+import com.evalon4j.frameworks.apidocjs.pojos.ApidocField
 import com.evalon4j.java.JavadocComponent
 import com.evalon4j.java.types.*
 import com.evalon4j.utils.JavaTypeUtils
@@ -106,6 +107,10 @@ class JsonStruct extends JavadocComponent {
     // Http Response
 
     JsonStruct() {
+
+    }
+
+    JsonStruct(ApidocField field) {
 
     }
 

@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.serializer.PropertyFilter
 import com.alibaba.fastjson.serializer.SerializerFeature
 import com.evalon4j.export.markdown.MarkdownBuilder
+import com.evalon4j.frameworks.apidocjs.ApidocParser
 import com.evalon4j.json.JsonModule
+import org.apache.commons.cli.CommandLine
 import org.apache.commons.cli.DefaultParser
 import org.apache.commons.cli.Options
 
@@ -12,74 +14,117 @@ class Evalon4J {
     static i18n = new Evalon4Ji18n()
 
     static void main(String[] args) {
-        if (!args) {
-            println i18n.help()
+        def cmd = buildCommandLine(args)
+
+        def projectPath = cmd.getOptionValue("p", "")
+
+        def exportType = cmd.getOptionValue("o", Evalon4JExportType.MARKDOWN)
+
+        if (isShowHelp(cmd)) {
+            handleShowHelp()
 
             return
         }
 
-        if (args.size() == 1) { // Only A Project Path Argument, this is for RabiAPI
-            println compile(args[0])
+        if (isExportEvalon4JFormat(cmd)) {
+            handleExportEvalon4JFormat(projectPath)
 
             return
         }
 
+        if (isExportApidocJSFormat(cmd)) {
+            handleExportApidocJSFormat(projectPath, cmd.getOptionValue("apidoc"))
+
+            return
+        }
+
+        if (isExportOtherFormats(cmd)) {
+            if (!projectPath) {
+                println i18n.noJavaProjectPath()
+
+                return
+            }
+
+            handleExportOtherFormats(projectPath, exportType)
+
+            return
+        }
+
+        println i18n.unknownExportType()
+    }
+
+    static CommandLine buildCommandLine(String[] args) {
         def options = buildOptions()
 
         def parser = new DefaultParser()
 
-        def cmd = parser.parse(options, args)
+        return parser.parse(options, args)
+    }
 
-        if (cmd.hasOption("h") || cmd.hasOption("help")) {
-            println i18n.help()
 
-            return
-        }
+    static boolean isShowHelp(CommandLine cmd) {
+        return cmd.hasOption("h") || cmd.hasOption("help")
+    }
 
-        def exportType = cmd.getOptionValue("o", Evalon4JExportType.MARKDOWN)
+    static boolean isExportEvalon4JFormat(CommandLine cmd) {
+        def exportType = cmd.getOptionValue("o")
 
-        if (!Evalon4JExportType.EXPORT_TYPES.contains(exportType)) {
-            println i18n.unknownExportType()
+        return exportType == Evalon4JExportType.EVALON
+    }
 
-            return
-        }
+    static boolean isExportApidocJSFormat(CommandLine cmd) {
+        return cmd.hasOption("apidoc")
+    }
 
-        if (cmd.hasOption("p")) {
-            String path = cmd.getOptionValue("p")
+    static boolean isExportOtherFormats(CommandLine cmd) {
+        def exportType = cmd.getOptionValue("o")
 
-            export(path, exportType)
-        } else {
-            println i18n.noJavaProjectPath()
-        }
+        return exportType != Evalon4JExportType.EVALON
+    }
+
+    static handleShowHelp() {
+        println i18n.help()
     }
 
     static buildOptions() {
         Options options = new Options()
 
-        options.addOption("p", true, "")
+        options.addOption("p", true, "Project Path")
 
-        options.addOption("o", true, "")
+        options.addOption("o", true, "Output Directory")
 
-        options.addOption("c", false, "")
+        options.addOption("c", false, "Configuration")
 
-        options.addOption("h", false, "")
+        options.addOption("h", false, "Help")
 
-        options.addOption("help", false, "")
+        options.addOption("help", false, "Help")
+
+        options.addOption("apidoc", false, "Apidocjs Parsed Payload")
 
         return options
     }
 
-    static compile(String projectPath) {
+    static handleExportEvalon4JFormat(String projectPath) {
         def result = new Evalon4JParser().parse(projectPath)
 
-        JSON.DEFAULT_GENERATE_FEATURE |= SerializerFeature.DisableCircularReferenceDetect.getMask();
+        JSON.DEFAULT_GENERATE_FEATURE |= SerializerFeature.DisableCircularReferenceDetect.getMask()
 
         def resultStr = JSON.toJSONString(result, propertyFilter, SerializerFeature.PrettyFormat)
 
-        return resultStr
+        println resultStr
     }
 
-    static export(String projectPath, String exportType) {
+    static handleExportApidocJSFormat(String projectPath, String apidocJSPayload) {
+        def result = new ApidocParser(projectPath).parse(apidocJSPayload)
+
+        JSON.DEFAULT_GENERATE_FEATURE |= SerializerFeature.DisableCircularReferenceDetect.getMask()
+
+        def resultStr = JSON.toJSONString(result, propertyFilter, SerializerFeature.PrettyFormat)
+
+        println resultStr
+    }
+
+    static handleExportOtherFormats(String projectPath, String exportType) {
         def jsonResult = new Evalon4JParser().parse(projectPath)
 
         if (jsonResult.hasError) {

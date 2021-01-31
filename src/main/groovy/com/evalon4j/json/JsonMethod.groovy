@@ -43,9 +43,13 @@ class JsonMethod {
 
     List<JsonStruct> parameters = []
 
+    String parametersExample = ""
+
     List<JsonStruct> parameterConstraints = []
 
     List<JsonStruct> responses = []
+
+    String responsesExample = ""
 
     // Java Service
 
@@ -69,7 +73,7 @@ class JsonMethod {
 
     List<String> produces = []
 
-    List<JsonStruct> responseHeaders = [] //
+    List<JsonStruct> responseHeaders = []
 
     SwaggerAnnotations swaggerAnnotations = null
 

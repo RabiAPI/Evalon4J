@@ -21,6 +21,10 @@ class FileUtils {
         }
     }
 
+    static String getProjectName(String projectPath) {
+        return projectPath.split("/").last()
+    }
+
     static List<File> getJavaModules(File projectDir) {
         List<File> modules = []
 

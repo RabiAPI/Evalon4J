@@ -8,28 +8,28 @@ class Evalon4JTest {
     void testCompile() {
         String projectPath = "/Users/whitecosm0s/Repository/MultipleModuleProject"
 
-        println Evalon4J.compile(projectPath)
+        println Evalon4J.handleExportEvalon4JFormat(projectPath)
     }
 
     @Test
     void testSpringRestfulController() {
         String projectPath = "/Users/whitecosm0s/Repository/SpringMVCExample"
 
-        println Evalon4J.compile(projectPath)
+        println Evalon4J.handleExportEvalon4JFormat(projectPath)
     }
 
     @Test
     void testEvalon4JExampleProject() {
         String projectPath = "/Users/whitecosm0s/Repository/evalon4j-example-project_renamed"
 
-        println Evalon4J.compile(projectPath)
+        println Evalon4J.handleExportEvalon4JFormat(projectPath)
     }
 
     @Test
     void testRabiApiDemoProject() {
         String projectPath = "/Users/whitecosm0s/Repository/rabiapi-demo-project"
 
-        String doc = Evalon4J.compile(projectPath)
+        String doc = Evalon4J.handleExportEvalon4JFormat(projectPath)
 
         File f = new File("/Users/whitecosm0s/Desktop/rabiapi-demo-project.json")
 
@@ -40,14 +40,14 @@ class Evalon4JTest {
     void testRabiApiDemoProjectForDebug() {
         String projectPath = "/Users/whitecosm0s/Repository/rabiapi-demo-project"
 
-        Evalon4J.compile(projectPath)
+        Evalon4J.handleExportEvalon4JFormat(projectPath)
     }
 
     @Test
     void testSwaggerPetStore() {
         String projectPath = "/Users/whitecosm0s/Repository/pet-store"
 
-        String doc = Evalon4J.compile(projectPath)
+        String doc = Evalon4J.handleExportEvalon4JFormat(projectPath)
 
         println doc
     }
@@ -56,7 +56,14 @@ class Evalon4JTest {
     void testApiDocTest() {
         String projectPath = "/Users/whitecosm0s/Repository/api-doc-test"
 
-        println Evalon4J.compile(projectPath)
+        println Evalon4J.handleExportEvalon4JFormat(projectPath)
+    }
+
+    @Test
+    void testArena() {
+        String projectPath = "/Users/whitecosm0s/Repository - Alibaba/arena-api-melody"
+
+        println Evalon4J.handleExportEvalon4JFormat(projectPath)
     }
 
     @Test
