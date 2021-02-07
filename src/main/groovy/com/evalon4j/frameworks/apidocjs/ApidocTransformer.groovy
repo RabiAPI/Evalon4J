@@ -183,6 +183,8 @@ class ApidocTransformer {
 
         parameter.fieldTypeName = f.type ? f.type : "String" // Default using String
 
+        parameter.defaultValue = f.defaultValue
+
         parameter.parameterType = parameterType
 
         parameter.fieldSummary = toText(f.description)
@@ -234,7 +236,7 @@ class ApidocTransformer {
         Map<String, JsonStruct> references = [:]
 
         fields.each { f ->
-            def splits = f.field.split("\\.").reverse()
+            def splits = f.field.split("\\.")
 
             List<JsonStruct> queue = [] // A B C D ... etc
 
@@ -282,7 +284,7 @@ class ApidocTransformer {
 
             last.defaultValue = f.defaultValue
 
-            jsonStructs << queue.first()
+            !jsonStructs.contains(queue.first()) && jsonStructs << queue.first()
         }
 
         return jsonStructs

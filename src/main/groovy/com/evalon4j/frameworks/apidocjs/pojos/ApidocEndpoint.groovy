@@ -14,7 +14,7 @@ class ApidocEndpoint {
 
     String groupDescription
 
-    ApidocDeprecated deprecated
+    Object deprecated = null
 
     // Api
 
