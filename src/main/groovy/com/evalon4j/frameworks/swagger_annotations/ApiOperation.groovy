@@ -1,8 +1,7 @@
-package com.evalon4j.frameworks.swagger
+package com.evalon4j.frameworks.swagger_annotations
 
 import com.evalon4j.frameworks.Annotation
 import com.evalon4j.java.types.JavaAbstractType
-import com.evalon4j.json.JsonStruct
 
 /**
  * Describes an operation or typically a HTTP method against a specific path.

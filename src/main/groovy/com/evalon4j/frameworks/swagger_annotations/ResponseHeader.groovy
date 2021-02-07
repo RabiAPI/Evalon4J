@@ -1,8 +1,7 @@
-package com.evalon4j.frameworks.swagger
+package com.evalon4j.frameworks.swagger_annotations
 
-import com.alibaba.fastjson.annotation.JSONField
+
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.java.types.JavaAbstractType
 
 /**
  * Represents a header that can be provided as part of the response.

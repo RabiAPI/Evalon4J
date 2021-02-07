@@ -1,4 +1,4 @@
-package com.evalon4j.frameworks.swagger
+package com.evalon4j.frameworks.swagger_annotations
 
 import com.evalon4j.frameworks.Annotation
 
@@ -9,7 +9,7 @@ import com.evalon4j.frameworks.Annotation
  */
 class ApiImplicitParams extends Annotation {
     /**
-     * A list of {@link com.evalon4j.frameworks.swagger.ApiImplicitParam}s available to the API operation.
+     * A list of {@link com.evalon4j.frameworks.swagger_annotations.ApiImplicitParam}s available to the API operation.
      */
     ApiImplicitParam[] value = [];
 }
