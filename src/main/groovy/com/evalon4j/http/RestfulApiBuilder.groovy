@@ -997,7 +997,7 @@ class RestfulApiBuilder {
 
         def operation = openAPIAnnotations.operation
 
-        List<com.evalon4j.frameworks.openapi.responses.ApiResponse> apiResponses = []
+        List<com.evalon4j.frameworks.openapi_annotations.responses.ApiResponse> apiResponses = []
 
         if (operation.responses) {
             apiResponses.addAll(operation.responses)

@@ -133,7 +133,7 @@ class JavaAnnotationsBuilder {
                 return
             }
 
-            if (annotation instanceof com.evalon4j.frameworks.openapi.responses.ApiResponse) {
+            if (annotation instanceof com.evalon4j.frameworks.openapi_annotations.responses.ApiResponse) {
                 openapiAnnotations.apiResponse << annotation
 
                 return

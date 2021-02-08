@@ -106,7 +106,7 @@ class JavaReferenceBuilder {
 
         List<ApiImplicitParam> parameters = []
 
-        List<com.evalon4j.frameworks.swagger.ApiResponse> responses = []
+        List<com.evalon4j.frameworks.swagger_annotations.ApiResponse> responses = []
 
         swaggerAnnotations.apiImplicitParams && (parameters.addAll(swaggerAnnotations.apiImplicitParams.value))
 
