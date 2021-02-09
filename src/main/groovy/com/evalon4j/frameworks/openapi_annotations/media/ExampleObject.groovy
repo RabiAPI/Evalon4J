@@ -1,7 +1,7 @@
 package com.evalon4j.frameworks.openapi_annotations.media
 
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.frameworks.openapi.extensions.Extension
+import com.evalon4j.frameworks.openapi_annotations.extensions.Extension
 
 /**
  * The annotation may be used to add one or more examples to the definition of a parameter, request or response content,

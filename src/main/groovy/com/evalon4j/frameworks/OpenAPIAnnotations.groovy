@@ -1,11 +1,11 @@
 package com.evalon4j.frameworks
 
-import com.evalon4j.frameworks.openapi.OpenAPIDefinition
-import com.evalon4j.frameworks.openapi.Operation
-import com.evalon4j.frameworks.openapi.Parameter
-import com.evalon4j.frameworks.openapi.Parameters
-import com.evalon4j.frameworks.openapi.responses.ApiResponse
-import com.evalon4j.frameworks.openapi.responses.ApiResponses
+import com.evalon4j.frameworks.openapi_annotations.OpenAPIDefinition
+import com.evalon4j.frameworks.openapi_annotations.Operation
+import com.evalon4j.frameworks.openapi_annotations.Parameter
+import com.evalon4j.frameworks.openapi_annotations.Parameters
+import com.evalon4j.frameworks.openapi_annotations.responses.ApiResponse
+import com.evalon4j.frameworks.openapi_annotations.responses.ApiResponses
 import com.github.javaparser.ast.expr.AnnotationExpr
 
 class OpenAPIAnnotations {

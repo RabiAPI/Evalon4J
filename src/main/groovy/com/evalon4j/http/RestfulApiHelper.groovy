@@ -1,9 +1,9 @@
 package com.evalon4j.http
 
-import com.evalon4j.frameworks.openapi.Parameter
-import com.evalon4j.frameworks.openapi.media.ArraySchema
-import com.evalon4j.frameworks.openapi.media.Content
-import com.evalon4j.frameworks.openapi.media.Schema
+import com.evalon4j.frameworks.openapi_annotations.Parameter
+import com.evalon4j.frameworks.openapi_annotations.media.ArraySchema
+import com.evalon4j.frameworks.openapi_annotations.media.Content
+import com.evalon4j.frameworks.openapi_annotations.media.Schema
 import com.evalon4j.json.JsonStruct
 import com.evalon4j.transformer.JsonStructTransformer
 

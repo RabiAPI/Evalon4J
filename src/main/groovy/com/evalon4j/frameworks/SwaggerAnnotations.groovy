@@ -1,6 +1,6 @@
 package com.evalon4j.frameworks
 
-import com.evalon4j.frameworks.swagger.*
+import com.evalon4j.frameworks.swagger_annotations.*
 import com.github.javaparser.ast.expr.AnnotationExpr
 
 class SwaggerAnnotations {

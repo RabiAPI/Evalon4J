@@ -1,14 +1,14 @@
 package com.evalon4j.http
 
 import com.evalon4j.Evalon4JTransformer
-import com.evalon4j.frameworks.openapi.Parameter
+import com.evalon4j.frameworks.openapi_annotations.Parameter
 import com.evalon4j.frameworks.spring.HttpStatus
 import com.evalon4j.frameworks.spring.MediaType
 import com.evalon4j.frameworks.spring.RequestMethod
 import com.evalon4j.frameworks.spring.mappings.RequestMapping
 import com.evalon4j.frameworks.spring.mappings.SpringMapping
-import com.evalon4j.frameworks.swagger.ApiImplicitParam
-import com.evalon4j.frameworks.swagger.ApiResponse
+import com.evalon4j.frameworks.swagger_annotations.ApiImplicitParam
+import com.evalon4j.frameworks.swagger_annotations.ApiResponse
 import com.evalon4j.java.JavaComponent
 import com.evalon4j.java.JavaMethod
 import com.evalon4j.java.types.JavaAbstractType
@@ -54,6 +54,8 @@ class RestfulApiBuilder {
 
                 jsonMethod.fullRequestPath = jsonMethod.basePath + jsonMethod.requestPath
 
+                jsonMethod.operationId = generateOperationId(jsonService, jsonMethod)
+
                 jsonService.methods << jsonMethod
             } catch (Exception e) {
                 jsonProject.errors << new JsonError(e)
@@ -61,6 +63,26 @@ class RestfulApiBuilder {
         }
 
         return jsonService.methods ? jsonService : null
+    }
+
+    private static generateOperationId(JsonService jsonService, JsonMethod jsonMethod) {
+        def serviceQualifiedName = jsonService.serviceQualifiedName
+
+        if (!serviceQualifiedName) {
+            serviceQualifiedName = jsonService.serviceName
+        }
+
+        def methodName = jsonMethod.serviceName
+
+        def overrideMethods = jsonService.methods.findAll {
+            it.methodName == methodName
+        }
+
+        if (!overrideMethods) {
+            return serviceQualifiedName + "_" + methodName
+        } else {
+            return serviceQualifiedName + "_" + methodName + "_" + overrideMethods.size()
+        }
     }
 
     private static buildRestfulApiFromExtension(JavaComponent javaComponent, JsonService jsonService, JavaAbstractType extension) {

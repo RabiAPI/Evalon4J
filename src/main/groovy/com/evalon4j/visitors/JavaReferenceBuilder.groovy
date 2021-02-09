@@ -2,12 +2,12 @@ package com.evalon4j.visitors
 
 import com.evalon4j.frameworks.OpenAPIAnnotations
 import com.evalon4j.frameworks.SwaggerAnnotations
-import com.evalon4j.frameworks.openapi.Parameter
-import com.evalon4j.frameworks.openapi.media.ArraySchema
-import com.evalon4j.frameworks.openapi.media.Content
-import com.evalon4j.frameworks.openapi.media.Schema
-import com.evalon4j.frameworks.openapi.responses.ApiResponse
-import com.evalon4j.frameworks.swagger.ApiImplicitParam
+import com.evalon4j.frameworks.openapi_annotations.Parameter
+import com.evalon4j.frameworks.openapi_annotations.media.ArraySchema
+import com.evalon4j.frameworks.openapi_annotations.media.Content
+import com.evalon4j.frameworks.openapi_annotations.media.Schema
+import com.evalon4j.frameworks.openapi_annotations.responses.ApiResponse
+import com.evalon4j.frameworks.swagger_annotations.ApiImplicitParam
 import com.evalon4j.java.JavaMethod
 import com.evalon4j.java.JavaProject
 import com.evalon4j.java.types.*

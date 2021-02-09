@@ -2,9 +2,9 @@ package com.evalon4j.visitors
 
 import com.evalon4j.annotation.AnnotationExtractor
 import com.evalon4j.frameworks.*
-import com.evalon4j.frameworks.openapi.Parameter
-import com.evalon4j.frameworks.swagger.ApiImplicitParam
-import com.evalon4j.frameworks.swagger.ApiResponse
+import com.evalon4j.frameworks.openapi_annotations.Parameter
+import com.evalon4j.frameworks.swagger_annotations.ApiImplicitParam
+import com.evalon4j.frameworks.swagger_annotations.ApiResponse
 import com.evalon4j.java.JavaComponent
 import com.evalon4j.java.types.JavaReferenceType
 import com.github.javaparser.ast.expr.AnnotationExpr

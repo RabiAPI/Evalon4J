@@ -1,7 +1,7 @@
 package com.evalon4j.frameworks.openapi_annotations
 
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.frameworks.openapi.extensions.Extension
+import com.evalon4j.frameworks.openapi_annotations.extensions.Extension
 
 class ExternalDocumentation extends Annotation {
     /**

@@ -1,9 +1,9 @@
 package com.evalon4j.frameworks.openapi_annotations
 
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.frameworks.openapi.parameters.RequestBody
-import com.evalon4j.frameworks.openapi.responses.ApiResponse
-import com.evalon4j.frameworks.openapi.servers.Server
+import com.evalon4j.frameworks.openapi_annotations.parameters.RequestBody
+import com.evalon4j.frameworks.openapi_annotations.responses.ApiResponse
+import com.evalon4j.frameworks.openapi_annotations.servers.Server
 
 /**
  * The annotation may be used to define a resource method as an OpenAPI Operation, and/or to define additional

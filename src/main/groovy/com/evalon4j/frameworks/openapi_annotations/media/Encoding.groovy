@@ -1,8 +1,8 @@
 package com.evalon4j.frameworks.openapi_annotations.media
 
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.frameworks.openapi.extensions.Extension
-import com.evalon4j.frameworks.openapi.headers.Header
+import com.evalon4j.frameworks.openapi_annotations.extensions.Extension
+import com.evalon4j.frameworks.openapi_annotations.headers.Header
 
 /**
  * The annotation may be used to add encoding details to the definition of a parameter, request or response content,

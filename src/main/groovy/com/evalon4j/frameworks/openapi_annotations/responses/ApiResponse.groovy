@@ -1,9 +1,9 @@
 package com.evalon4j.frameworks.openapi_annotations.responses
 
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.frameworks.openapi.extensions.Extension
-import com.evalon4j.frameworks.openapi.headers.Header
-import com.evalon4j.frameworks.openapi.media.Content
+import com.evalon4j.frameworks.openapi_annotations.extensions.Extension
+import com.evalon4j.frameworks.openapi_annotations.headers.Header
+import com.evalon4j.frameworks.openapi_annotations.media.Content
 
 /**
  * The annotation may be used at method level or as field of {@link io.swagger.v3.oas.annotations.Operation} to define one or more responses of the

@@ -1,8 +1,8 @@
 package com.evalon4j.json
 
 import com.evalon4j.Evalon4JConfiguration
-import com.evalon4j.frameworks.openapi.OpenAPIDefinition
-import com.evalon4j.frameworks.swagger.SwaggerDefinition
+import com.evalon4j.frameworks.openapi_annotations.OpenAPIDefinition
+import com.evalon4j.frameworks.swagger_annotations.SwaggerDefinition
 import com.evalon4j.java.JavaModule
 
 class JsonModule {

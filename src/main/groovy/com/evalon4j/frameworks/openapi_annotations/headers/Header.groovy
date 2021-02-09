@@ -1,7 +1,7 @@
 package com.evalon4j.frameworks.openapi_annotations.headers
 
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.frameworks.openapi.media.Schema
+import com.evalon4j.frameworks.openapi_annotations.media.Schema
 
 /**
  * The annotation may be used to add one or more headers to the definition of a response or as attribute of content

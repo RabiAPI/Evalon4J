@@ -2,7 +2,7 @@ package com.evalon4j.frameworks.openapi_annotations.media
 
 
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.frameworks.openapi.extensions.Extension
+import com.evalon4j.frameworks.openapi_annotations.extensions.Extension
 import com.evalon4j.java.types.JavaAbstractType
 
 /**

@@ -1,11 +1,11 @@
 package com.evalon4j.frameworks.openapi_annotations
 
 import com.evalon4j.frameworks.Annotation
-import com.evalon4j.frameworks.openapi.extensions.Extension
-import com.evalon4j.frameworks.openapi.media.ArraySchema
-import com.evalon4j.frameworks.openapi.media.Content
-import com.evalon4j.frameworks.openapi.media.ExampleObject
-import com.evalon4j.frameworks.openapi.media.Schema
+import com.evalon4j.frameworks.openapi_annotations.extensions.Extension
+import com.evalon4j.frameworks.openapi_annotations.media.ArraySchema
+import com.evalon4j.frameworks.openapi_annotations.media.Content
+import com.evalon4j.frameworks.openapi_annotations.media.ExampleObject
+import com.evalon4j.frameworks.openapi_annotations.media.Schema
 
 /**
  * The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define
